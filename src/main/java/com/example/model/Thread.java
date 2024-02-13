@@ -1,16 +1,26 @@
 package com.example.model;
 
+import jakarta.persistence.*;
+
+@Entity
 public class Thread {
-    private int id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int threadId;
+
+    @Column(nullable = false)
     private String title;
+
+    @OneToOne(cascade = CascadeType.ALL, optional = false)
+    @JoinColumn(name = "initial_post_id")
     private Post initialPost;
 
     public int getId() {
-        return id;
+        return threadId;
     }
 
     public void setId(int id) {
-        this.id = id;
+        this.threadId = id;
     }
 
     public String getTitle() {
