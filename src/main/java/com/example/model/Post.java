@@ -21,6 +21,14 @@ public class Post {
     @JoinColumn(name = "thread_id")
     private Thread parentThread;
 
+    public int getPostId() {
+        return postId;
+    }
+
+    public void setPostId(int postId) {
+        this.postId = postId;
+    }
+
     public String getBody() {
         return body;
     }
@@ -35,5 +43,13 @@ public class Post {
 
     public void setTimestamp(Date timestamp) {
         this.timestamp = timestamp;
+    }
+
+    public Thread getParentThread() {
+        return parentThread;
+    }
+
+    public void setParentThread(Thread parentThread) {
+        this.parentThread = parentThread;
     }
 }
