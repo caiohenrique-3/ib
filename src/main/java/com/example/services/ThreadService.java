@@ -17,15 +17,10 @@ public class ThreadService {
         this.postService = postService;
     }
 
-    public void createThread(String title) {
+    public void createThreadWithInitialPost(String title, String body) {
         Thread thread = new Thread();
         thread.setTitle(title);
         threadRepository.save(thread);
-    }
-
-    public void addInitialPostToThread(int threadId, String body) {
-        Thread thread = threadRepository.findById(threadId)
-                .orElseThrow(() -> new RuntimeException("Thread not found"));
 
         Post initialPost = postService.createPostAndReturn(body, thread);
 

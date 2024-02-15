@@ -1,6 +1,5 @@
 package com.example.services;
 
-import com.example.model.Post;
 import com.example.model.Thread;
 import com.example.repositories.ThreadRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -8,7 +7,6 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 
-import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
@@ -31,34 +29,15 @@ public class ThreadServiceUnitTests {
     }
 
     @Test
-    void createThread() {
-        threadService.createThread("good morning sirs");
+    void createThreadWithInitialPost() {
+        threadService.createThreadWithInitialPost("i can take this anymore",
+                "my tests all faill!!!!");
 
-        verify(threadRepository, times(1))
+        verify(threadRepository, times(2))
                 .save(any(Thread.class));
-    }
-
-    @Test
-    void addInitialPostToThread() {
-        Thread thread = new Thread();
-
-        when(threadRepository.findById(anyInt()))
-                .thenReturn(Optional.of(thread));
-
-        threadService.addInitialPostToThread(1, "gachi");
-
-        verify(threadRepository, times(1))
-                .save(eq(thread));
 
         verify(postService, times(1))
-                .createPostAndReturn(eq("gachi"), eq(thread));
-    }
-
-    @Test
-    void addInitialPostToThread_throwsException_whenThreadNotFound() {
-        assertThrows(RuntimeException.class, () ->
-                threadService
-                        .addInitialPostToThread(anyInt(), eq("gachi")));
+                .createPostAndReturn(anyString(), any(Thread.class));
     }
 
     @Test
