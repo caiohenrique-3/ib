@@ -10,14 +10,25 @@ import java.util.Optional;
 @Service
 public class ThreadService {
     private final ThreadRepository threadRepository;
+    private final PostService postService;
 
-    public ThreadService(ThreadRepository threadRepository) {
+    public ThreadService(ThreadRepository threadRepository, PostService postService) {
         this.threadRepository = threadRepository;
+        this.postService = postService;
     }
 
-    public void createThread(String title, Post initialPost) {
+    public void createThread(String title) {
         Thread thread = new Thread();
         thread.setTitle(title);
+        threadRepository.save(thread);
+    }
+
+    public void addInitialPostToThread(int threadId, String body) {
+        Thread thread = threadRepository.findById(threadId)
+                .orElseThrow(() -> new RuntimeException("Thread not found"));
+
+        Post initialPost = postService.createPostAndReturn(body, thread);
+
         thread.setInitialPost(initialPost);
         threadRepository.save(thread);
     }

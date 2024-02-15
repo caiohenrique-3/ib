@@ -20,12 +20,13 @@ public class PostService {
         this.threadRepository = threadRepository;
     }
 
-    public void createPost(String body, Thread parentThread) {
+    public Post createPostAndReturn(String body, Thread parentThread) {
         Post post = new Post();
         post.setBody(body);
         post.setParentThread(parentThread);
         post.setTimestamp(new Date());
         postRepository.save(post);
+        return post;
     }
 
     public void deletePostById(int postId) {
