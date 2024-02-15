@@ -22,7 +22,7 @@ public class ThreadService {
         thread.setTitle(title);
         threadRepository.save(thread);
 
-        Post initialPost = postService.createPostAndReturn(body, thread);
+        Post initialPost = postService.createPostAndReturn(body, thread.getId());
 
         thread.setInitialPost(initialPost);
         threadRepository.save(thread);

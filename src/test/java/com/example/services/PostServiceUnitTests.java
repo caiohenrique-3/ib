@@ -34,7 +34,11 @@ public class PostServiceUnitTests {
 
     @Test
     void createPost() {
-        postService.createPostAndReturn("T35T!", new Thread());
+        doReturn(Optional.of(new Thread()))
+                .when(threadRepository)
+                .findById(anyInt());
+
+        postService.createPostAndReturn("T35T!", 1);
 
         verify(postRepository, times(1))
                 .save(any(Post.class));

@@ -37,7 +37,7 @@ public class ThreadServiceUnitTests {
                 .save(any(Thread.class));
 
         verify(postService, times(1))
-                .createPostAndReturn(anyString(), any(Thread.class));
+                .createPostAndReturn(anyString(), anyInt());
     }
 
     @Test

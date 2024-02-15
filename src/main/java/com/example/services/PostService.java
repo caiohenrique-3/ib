@@ -20,7 +20,10 @@ public class PostService {
         this.threadRepository = threadRepository;
     }
 
-    public Post createPostAndReturn(String body, Thread parentThread) {
+    public Post createPostAndReturn(String body, int parentThreadId) {
+        Thread parentThread = threadRepository.findById(parentThreadId)
+                .orElseThrow(() -> new RuntimeException("Thread not found"));
+
         Post post = new Post();
         post.setBody(body);
         post.setParentThread(parentThread);
