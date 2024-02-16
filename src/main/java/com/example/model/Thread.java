@@ -11,16 +11,15 @@ public class Thread {
     @Column(nullable = false)
     private String title;
 
-    @OneToOne(cascade = CascadeType.ALL, optional = false)
-    @JoinColumn(name = "initial_post_id")
-    private Post initialPost;
+    @Column(nullable = false)
+    private String initialPostBody;
 
-    public int getId() {
+    public int getThreadId() {
         return threadId;
     }
 
-    public void setId(int id) {
-        this.threadId = id;
+    public void setThreadId(int threadId) {
+        this.threadId = threadId;
     }
 
     public String getTitle() {
@@ -31,11 +30,11 @@ public class Thread {
         this.title = title;
     }
 
-    public Post getInitialPost() {
-        return initialPost;
+    public String getInitialPostBody() {
+        return initialPostBody;
     }
 
-    public void setInitialPost(Post initialPost) {
-        this.initialPost = initialPost;
+    public void setInitialPostBody(String initialPostBody) {
+        this.initialPostBody = initialPostBody;
     }
 }

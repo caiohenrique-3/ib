@@ -20,11 +20,7 @@ public class ThreadService {
     public void createThreadWithInitialPost(String title, String body) {
         Thread thread = new Thread();
         thread.setTitle(title);
-        threadRepository.save(thread);
-
-        Post initialPost = postService.createPostAndReturn(body, thread.getId());
-
-        thread.setInitialPost(initialPost);
+        thread.setInitialPostBody(body);
         threadRepository.save(thread);
     }
 

@@ -33,11 +33,8 @@ public class ThreadServiceUnitTests {
         threadService.createThreadWithInitialPost("i can take this anymore",
                 "my tests all faill!!!!");
 
-        verify(threadRepository, times(2))
+        verify(threadRepository, times(1))
                 .save(any(Thread.class));
-
-        verify(postService, times(1))
-                .createPostAndReturn(anyString(), anyInt());
     }
 
     @Test
