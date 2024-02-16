@@ -1,6 +1,5 @@
 package com.example.services;
 
-import com.example.model.Post;
 import com.example.model.Thread;
 import com.example.repositories.ThreadRepository;
 import org.springframework.stereotype.Service;
@@ -17,11 +16,12 @@ public class ThreadService {
         this.postService = postService;
     }
 
-    public void createThreadWithInitialPost(String title, String body) {
+    public Thread createThreadAndReturn(String title, String body) {
         Thread thread = new Thread();
         thread.setTitle(title);
         thread.setInitialPostBody(body);
         threadRepository.save(thread);
+        return thread;
     }
 
     public void deleteThreadById(int threadId) {

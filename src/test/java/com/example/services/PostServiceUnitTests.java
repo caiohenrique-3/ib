@@ -49,15 +49,15 @@ public class PostServiceUnitTests {
         postService.deletePostById(1);
 
         verify(postRepository, times(1))
-                .deleteById(anyInt());
+                .deleteById(1);
     }
 
     @Test
     void getPostById() {
-        postService.getPostById(anyInt());
+        postService.getPostById(1);
 
         verify(postRepository, times(1))
-                .findById(anyInt());
+                .findById(1);
     }
 
     @Test
@@ -76,7 +76,7 @@ public class PostServiceUnitTests {
         postService.getAllPostsInThreadById(1);
 
         verify(threadRepository, times(1))
-                .findById(anyInt());
+                .findById(1);
 
         verify(postRepository, times(1))
                 .findByParentThread(any(Thread.class));

@@ -2,6 +2,8 @@ package com.example.model;
 
 import jakarta.persistence.*;
 
+import java.util.List;
+
 @Entity
 public class Thread {
     @Id
@@ -13,6 +15,9 @@ public class Thread {
 
     @Column(nullable = false)
     private String initialPostBody;
+
+    @OneToMany(mappedBy = "parentThread", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Post> posts;
 
     public int getThreadId() {
         return threadId;

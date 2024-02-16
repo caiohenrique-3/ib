@@ -30,7 +30,7 @@ public class ThreadServiceUnitTests {
 
     @Test
     void createThreadWithInitialPost() {
-        threadService.createThreadWithInitialPost("i can take this anymore",
+        threadService.createThreadAndReturn("i can take this anymore",
                 "my tests all faill!!!!");
 
         verify(threadRepository, times(1))
@@ -39,18 +39,18 @@ public class ThreadServiceUnitTests {
 
     @Test
     void deleteThread() {
-        threadService.deleteThreadById(anyInt());
+        threadService.deleteThreadById(1);
 
         verify(threadRepository, times(1))
-                .deleteById(anyInt());
+                .deleteById(1);
     }
 
     @Test
     void getThreadById() {
-        threadService.getThreadById(anyInt());
+        threadService.getThreadById(1);
 
         verify(threadRepository, times(1))
-                .findById(anyInt());
+                .findById(1);
     }
 
     @Test
