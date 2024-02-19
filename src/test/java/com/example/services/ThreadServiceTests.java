@@ -14,9 +14,6 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-// TODO: Change all direct calls to repository classes
-//  to use the methods available in the service classes instead.
-
 @SpringBootTest
 public class ThreadServiceTests {
     @Autowired
@@ -36,11 +33,11 @@ public class ThreadServiceTests {
         Thread t = threadService
                 .createThreadAndReturn("hello", "this is a test!");
 
-        assertTrue(threadRepository
-                .findById(t.getThreadId()).isPresent());
+        assertTrue(threadService.getThreadById(
+                t.getThreadId()).isPresent());
 
-        assertFalse(threadRepository
-                .findById(t.getThreadId()).isEmpty());
+        assertFalse(threadService.getThreadById(
+                t.getThreadId()).isEmpty());
     }
 
     @Test
@@ -59,16 +56,16 @@ public class ThreadServiceTests {
         Thread t = threadService
                 .createThreadAndReturn("hello", "this is a test!");
 
-        assertTrue(threadRepository
-                .findById(t.getThreadId()).isPresent());
+        assertTrue(threadService.getThreadById(
+                t.getThreadId()).isPresent());
 
-        assertFalse(threadRepository
-                .findById(t.getThreadId()).isEmpty());
+        assertFalse(threadService.getThreadById(
+                t.getThreadId()).isEmpty());
 
         threadService.deleteThreadById(t.getThreadId());
 
-        assertFalse(threadRepository
-                .findById(t.getThreadId()).isPresent());
+        assertFalse(threadService.getThreadById(
+                t.getThreadId()).isPresent());
     }
 
     @Test
@@ -76,26 +73,26 @@ public class ThreadServiceTests {
         Thread t = threadService
                 .createThreadAndReturn("hello", "this is a test!");
 
-        assertTrue(threadRepository
-                .findById(t.getThreadId()).isPresent());
+        assertTrue(threadService.getThreadById(
+                t.getThreadId()).isPresent());
 
         Post p1 = postService.createPostAndReturn("hi 1", t.getThreadId());
         Post p2 = postService.createPostAndReturn("hi 2", t.getThreadId());
         Post p3 = postService.createPostAndReturn("hi 3", t.getThreadId());
 
-        assertTrue(postRepository
-                .findById(p1.getPostId()).isPresent());
-        assertTrue(postRepository
-                .findById(p2.getPostId()).isPresent());
-        assertTrue(postRepository
-                .findById(p3.getPostId()).isPresent());
+        assertTrue(postService.getPostById(
+                p1.getPostId()).isPresent());
+        assertTrue(postService.getPostById(
+                p2.getPostId()).isPresent());
+        assertTrue(postService.getPostById(
+                p3.getPostId()).isPresent());
 
-        assertFalse(postRepository
-                .findById(p1.getPostId()).isEmpty());
-        assertFalse(postRepository
-                .findById(p2.getPostId()).isEmpty());
-        assertFalse(postRepository
-                .findById(p3.getPostId()).isEmpty());
+        assertFalse(postService.getPostById(
+                p1.getPostId()).isEmpty());
+        assertFalse(postService.getPostById(
+                p2.getPostId()).isEmpty());
+        assertFalse(postService.getPostById(
+                p3.getPostId()).isEmpty());
 
         List<Post> posts = postService
                 .getAllPostsInThreadById(t.getThreadId());
@@ -104,10 +101,10 @@ public class ThreadServiceTests {
 
         threadService.deleteThreadById(t.getThreadId());
 
-        assertFalse(threadRepository.findById(t.getThreadId()).isPresent());
-        assertFalse(postRepository.findById(p1.getPostId()).isPresent());
-        assertFalse(postRepository.findById(p2.getPostId()).isPresent());
-        assertFalse(postRepository.findById(p3.getPostId()).isPresent());
+        assertFalse(threadService.getThreadById(t.getThreadId()).isPresent());
+        assertFalse(postService.getPostById(p1.getPostId()).isPresent());
+        assertFalse(postService.getPostById(p2.getPostId()).isPresent());
+        assertFalse(postService.getPostById(p3.getPostId()).isPresent());
     }
 
     @Test
