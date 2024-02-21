@@ -1,0 +1,67 @@
+html {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  font-weight: normal;
+}
+
+body {
+  background-color: black;
+  color: greenyellow;
+  font-family:
+    -apple-system,
+    BlinkMacSystemFont,
+    avenir next,
+    avenir,
+    segoe ui,
+    helvetica neue,
+    helvetica,
+    Cantarell,
+    Ubuntu,
+    roboto,
+    noto,
+    arial,
+    sans-serif;
+}
+
+header {
+  text-align: center;
+}
+
+header input,
+header textarea,
+header button {
+  background-color: #2b2a33;
+  color: whitesmoke;
+  border: none;
+}
+
+header button {
+  padding: 0.5rem;
+}
+
+header button:hover {
+  font-weight: bold;
+}
+
+header input {
+  padding: 0.5rem;
+  margin-block-end: 1rem;
+  margin-inline-end: 0.5rem;
+  border: none;
+}
+
+header textarea {
+  padding: 0.5rem;
+  border: none;
+  max-width: 100%;
+}
+
+header ::placeholder {
+  color: grey;
+  opacity: 1;
+}
+
+header :-ms-input-placeholder {
+  color: grey;
+}

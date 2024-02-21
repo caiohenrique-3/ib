@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title></title>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <link href="/style.css" rel="stylesheet"/>
+    <link href="/favicon.svg" rel="icon" type="image/x-icon"/>
+</head>
+<body>
+<header>
+    <h2>Make a new discussion</h2>
+    <form method="post" action="/createThread">
+        <input
+                type="text"
+                name="title"
+                value=""
+                placeholder="Title of your thread"
+                required
+        />
+
+        <button type="submit" id="submit-button">Post</button>
+        <br/>
+
+        <textarea
+                name="body"
+                rows="10"
+                cols="30"
+                placeholder="Body of your thread"
+        ></textarea
+        ><br/>
+    </form>
+</header>
+
+<main>
+    <h2>Discussions</h2>
+    <div th:each="thread : ${threads}">
+        <h3 th:text="${thread.title}"></h3>
+        <p th:text="${thread.initialPostBody}"></p>
+        <!--        <p th:text="${#lists.size(thread.posts)} + ' replies'"></p>-->
+    </div>
+</main>
+</body>
+</html>

@@ -58,4 +58,16 @@ public class ThreadServiceUnitTests {
         assertTrue(threadService.getThreadById(anyInt()).isEmpty());
         assertFalse(threadService.getThreadById(anyInt()).isPresent());
     }
+
+    @Test
+    void getAllThreads() {
+        threadService.getAllThreads();
+        verify(threadRepository, times(1))
+                .findAll();
+    }
+
+    @Test
+    void getAllThreads_returnsEmptyList() {
+        assertTrue(threadService.getAllThreads().isEmpty());
+    }
 }

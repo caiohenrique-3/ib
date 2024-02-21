@@ -52,7 +52,7 @@ public class ThreadServiceTests {
     }
 
     @Test
-    public void deleteThreadById() {
+    void deleteThreadById() {
         Thread t = threadService
                 .createThreadAndReturn("hello", "this is a test!");
 
@@ -69,7 +69,7 @@ public class ThreadServiceTests {
     }
 
     @Test
-    public void deletingThreadDeletesRepliesToo() {
+    void deletingThreadDeletesRepliesToo() {
         Thread t = threadService
                 .createThreadAndReturn("hello", "this is a test!");
 
@@ -108,7 +108,7 @@ public class ThreadServiceTests {
     }
 
     @Test
-    public void getThreadById() {
+    void getThreadById() {
         Thread t = threadService
                 .createThreadAndReturn("hello", "this is a test!");
 
@@ -117,5 +117,29 @@ public class ThreadServiceTests {
 
         assertFalse(threadService
                 .getThreadById(t.getThreadId()).isEmpty());
+    }
+
+    @Test
+    void getAllThreads_isNotEmpty_ifTheresExistingThreads() {
+        threadService.createThreadAndReturn("hello", "this is a test!");
+        threadService.createThreadAndReturn("hello", "this is a test!");
+        threadService.createThreadAndReturn("hello", "this is a test!");
+        threadService.createThreadAndReturn("hello", "this is a test!");
+        List<Thread> threads = threadService.getAllThreads();
+
+        assertFalse(threadService.getAllThreads().isEmpty());
+        assertEquals(4, threads.size());
+    }
+
+    @Test
+    void getAllThreads_isEmpty_ifTheresNoExistingThreads() {
+        // cleaning before test
+        List<Thread> threads = threadService.getAllThreads();
+        for (Thread thread : threads) {
+            threadService
+                    .deleteThreadById(thread.getThreadId());
+        }
+
+        assertTrue(threadService.getAllThreads().isEmpty());
     }
 }
