@@ -5,6 +5,7 @@ import com.example.repositories.ThreadRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,6 +23,7 @@ public class ThreadService {
         Thread thread = new Thread();
         thread.setTitle(title);
         thread.setInitialPostBody(body);
+        thread.setTimestamp(new Date());
         threadRepository.save(thread);
         return thread;
     }

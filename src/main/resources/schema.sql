@@ -1,5 +1,6 @@
 CREATE TABLE IF NOT EXISTS thread (
     thread_id INT AUTO_INCREMENT PRIMARY KEY,
+    timestamp TIMESTAMP NOT NULL,
     title VARCHAR(255) NOT NULL,
     initial_post_body TEXT NOT NULL
 );
