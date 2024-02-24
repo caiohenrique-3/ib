@@ -42,4 +42,12 @@ public class Thread {
     public void setInitialPostBody(String initialPostBody) {
         this.initialPostBody = initialPostBody;
     }
+
+    public List<Post> getPosts() {
+        return posts;
+    }
+
+    public void setPosts(List<Post> posts) {
+        this.posts = posts;
+    }
 }

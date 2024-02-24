@@ -36,8 +36,9 @@
     <h2>Discussions</h2>
     <div th:each="thread : ${threads}">
         <h3 th:text="${thread.title}"></h3>
+        <p th:text="'ID: ' + ${thread.threadId}"></p>
         <p th:text="${thread.initialPostBody}"></p>
-        <!--        <p th:text="${#lists.size(thread.posts)} + ' replies'"></p>-->
+        <p th:text="${#lists.size(thread.posts)} + ' replies'"></p>
     </div>
 </main>
 </body>

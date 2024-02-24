@@ -17,8 +17,7 @@ public class MainController {
 
     @GetMapping("/")
     public String showMainPage(Model model) {
-        model.addAttribute("threads",
-                threadService.getAllThreads());
+        model.addAttribute("threads", threadService.getAllThreads());
         return "index";
     }
 
