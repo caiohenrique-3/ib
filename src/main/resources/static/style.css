@@ -6,22 +6,10 @@ html {
 }
 
 body {
-  background-color: black;
-  color: greenyellow;
-  font-family:
-    -apple-system,
-    BlinkMacSystemFont,
-    avenir next,
-    avenir,
-    segoe ui,
-    helvetica neue,
-    helvetica,
-    Cantarell,
-    Ubuntu,
-    roboto,
-    noto,
-    arial,
-    sans-serif;
+  background-color: #181a1b;
+  color: #a9acb1;
+  font-family: Arial, sans-serif;
+  font-size: 0.8rem;
 }
 
 header {
@@ -31,9 +19,9 @@ header {
 header input,
 header textarea,
 header button {
-  background-color: #2b2a33;
-  color: whitesmoke;
-  border: none;
+  background-color: #282a2b;
+  color: #f8f8f2;
+  border: 0.06rem solid #f8f8f2;
 }
 
 header button {
@@ -58,10 +46,38 @@ header textarea {
 }
 
 header ::placeholder {
-  color: grey;
+  color: #6272a4;
   opacity: 1;
 }
 
 header :-ms-input-placeholder {
-  color: grey;
+  color: #6272a4;
+}
+
+main {
+  margin: 20px;
+  border: 0.06rem solid #f8f8f2;
+  background-color: #282a2b;
+  padding: 0.6rem;
+}
+
+main h2 {
+  color: #f8f8f2;
+}
+
+main div {
+  border: 1px solid #f8f8f2;
+  margin-bottom: 0.6rem;
+  padding: 0.6rem;
+  background-color: #383a3b;
+}
+
+main h3 {
+  color: #f8f8f2;
+  margin-bottom: 0.3rem;
+}
+
+main p {
+  color: #a9acb1;
+  margin-bottom: 0.3rem;
 }
