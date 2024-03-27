@@ -16,8 +16,7 @@ header {
   text-align: center;
 }
 
-header input,
-header textarea,
+header a,
 header button {
   background-color: #282a2b;
   color: #f8f8f2;
@@ -32,26 +31,12 @@ header button:hover {
   font-weight: bold;
 }
 
-header input {
+header a {
   padding: 0.5rem;
   margin-block-end: 1rem;
   margin-inline-end: 0.5rem;
   border: none;
-}
-
-header textarea {
-  padding: 0.5rem;
-  border: none;
-  max-width: 100%;
-}
-
-header ::placeholder {
-  color: #6272a4;
-  opacity: 1;
-}
-
-header :-ms-input-placeholder {
-  color: #6272a4;
+  text-decoration: none;
 }
 
 main {
@@ -59,10 +44,6 @@ main {
   border: 0.06rem solid #f8f8f2;
   background-color: #282a2b;
   padding: 0.6rem;
-}
-
-main h2 {
-  color: #f8f8f2;
 }
 
 main div {
@@ -80,4 +61,34 @@ main h3 {
 main p {
   color: #a9acb1;
   margin-bottom: 0.3rem;
+}
+
+form textarea,
+form button {
+  background-color: #282a2b;
+  color: #f8f8f2;
+  border: 0.06rem solid #f8f8f2;
+}
+
+form button {
+  padding: 0.5rem;
+}
+
+form button:hover {
+  font-weight: bold;
+}
+
+form textarea {
+  padding: 0.5rem;
+  border: none;
+  max-width: 100%;
+}
+
+form ::placeholder {
+  color: #6272a4;
+  opacity: 1;
+}
+
+form :-ms-input-placeholder {
+  color: #6272a4;
 }

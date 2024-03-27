@@ -2,7 +2,9 @@ package com.example.model;
 
 import jakarta.persistence.*;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 @Entity
 public class Post {
@@ -51,5 +53,10 @@ public class Post {
 
     public void setParentThread(Thread parentThread) {
         this.parentThread = parentThread;
+    }
+
+    public String getFormattedInfo() {
+        SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yy (EEE) HH:mm:ss 'Id '" + postId, Locale.US);
+        return sdf.format(timestamp);
     }
 }

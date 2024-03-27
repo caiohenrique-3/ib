@@ -4,7 +4,7 @@
     <title></title>
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
-    <link href="/style.css" rel="stylesheet"/>
+    <link href="/index.css" rel="stylesheet"/>
     <link href="/favicon.svg" rel="icon" type="image/x-icon"/>
 </head>
 <body>
@@ -36,7 +36,7 @@
     <h2>Discussions</h2>
     <div th:each="thread : ${threads}">
         <p th:text="${thread.getFormattedInfo}"></p>
-        <h3 th:text="${thread.title}"></h3>
+        <h3><a th:href="@{/threads/{id}(id=${thread.threadId})}" th:text="${thread.title}"></a></h3>
         <p th:text="${thread.initialPostBody}"></p>
         <p th:text="${#lists.size(thread.posts)} + ' replies'"></p>
     </div>

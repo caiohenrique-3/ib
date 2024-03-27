@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title></title>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <link href="/thread.css" rel="stylesheet"/>
+    <link href="/favicon.svg" rel="icon" type="image/x-icon"/>
+</head>
+<body>
+<header><<a href="/">Homepage</a></header>
+
+<main>
+    <div>
+        <p th:text="${thread.getFormattedInfo}"></p>
+        <h3 th:text="${thread.title}"></h3>
+        <p th:text="${thread.initialPostBody}"></p>
+    </div>
+
+    <div th:each="post: ${thread.posts}">
+        <p th:text="${post.getFormattedInfo}"></p>
+        <p th:text="${post.body}">></p>
+    </div>
+
+    <form method="post" th:action="@{/replyTo/{id}(id=${thread.threadId})}">
+        <textarea
+                name="body"
+                rows="10"
+                cols="30"
+                placeholder="Body of the reply"
+                required
+        ></textarea
+        ><br/>
+
+        <button type="submit" id="submit-button">Reply</button>
+    </form>
+</main>
+</body>
+</html>
