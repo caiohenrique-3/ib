@@ -57,7 +57,7 @@ public class MainControllerTests {
         Thread t = threadService
                 .createThreadAndReturn("test", "test");
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/threads/" + t.getThreadId()))
+        mockMvc.perform(MockMvcRequestBuilders.get("/threads/" + t.getId()))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.view().name("thread"));
     }
@@ -73,11 +73,11 @@ public class MainControllerTests {
         Thread t = threadService
                 .createThreadAndReturn("test", "test");
 
-        mockMvc.perform(MockMvcRequestBuilders.post("/replyTo/" + t.getThreadId())
-                        .param("id", String.valueOf(t.getThreadId()))
+        mockMvc.perform(MockMvcRequestBuilders.post("/replyTo/" + t.getId())
+                        .param("id", String.valueOf(t.getId()))
                         .param("body", "Test Body"))
                 .andExpect(MockMvcResultMatchers.status().is3xxRedirection())
-                .andExpect(MockMvcResultMatchers.redirectedUrl("/threads/" + t.getThreadId()));
+                .andExpect(MockMvcResultMatchers.redirectedUrl("/threads/" + t.getId()));
     }
 
     @Test

@@ -40,7 +40,7 @@ public class PostServiceTests {
                 .createPostAndReturn("good morning", 1);
 
         assertTrue(postService.getPostById(
-                createdPost.getPostId()).isPresent());
+                createdPost.getId()).isPresent());
     }
 
     @Test
@@ -51,10 +51,10 @@ public class PostServiceTests {
                 .createPostAndReturn("good morning sir!", 1);
 
         postService
-                .deletePostById(createdPost.getPostId());
+                .deletePostById(createdPost.getId());
 
         assertFalse(postService.getPostById(
-                createdPost.getPostId()).isPresent());
+                createdPost.getId()).isPresent());
     }
 
     @Test
@@ -63,14 +63,14 @@ public class PostServiceTests {
                 .createThreadAndReturn("hello", "hello test");
 
         Post p = postService.createPostAndReturn(
-                "good morning test!", t.getThreadId());
+                "good morning test!", t.getId());
 
         assertNotEquals(null, postService
-                .getPostById(p.getPostId()));
+                .getPostById(p.getId()));
 
         assertEquals("good morning test!",
                 postService
-                        .getPostById(p.getPostId())
+                        .getPostById(p.getId())
                         .get()
                         .getBody());
     }
@@ -90,11 +90,11 @@ public class PostServiceTests {
         Thread thread = threadService
                 .createThreadAndReturn("hello", "hello b");
 
-        postService.createPostAndReturn("good morning!", thread.getThreadId());
-        postService.createPostAndReturn("hallo", thread.getThreadId());
-        postService.createPostAndReturn("woooow 30", thread.getThreadId());
+        postService.createPostAndReturn("good morning!", thread.getId());
+        postService.createPostAndReturn("hallo", thread.getId());
+        postService.createPostAndReturn("woooow 30", thread.getId());
 
-        List<Post> posts = postService.getAllPostsInThreadById(thread.getThreadId());
+        List<Post> posts = postService.getAllPostsInThreadById(thread.getId());
 
         assertFalse(posts.isEmpty());
 
@@ -114,7 +114,7 @@ public class PostServiceTests {
                 .createThreadAndReturn("hello", "hello saars");
 
         List<Post> posts = postService
-                .getAllPostsInThreadById(t.getThreadId());
+                .getAllPostsInThreadById(t.getId());
 
         assertTrue(posts.isEmpty());
     }

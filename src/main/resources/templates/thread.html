@@ -22,7 +22,7 @@
         <p th:text="${post.body}">></p>
     </div>
 
-    <form method="post" th:action="@{/replyTo/{id}(id=${thread.threadId})}">
+    <form method="post" th:action="@{/replyTo/{id}(id=${thread.id})}">
         <textarea
                 name="body"
                 rows="10"
