@@ -32,6 +32,19 @@ public class PostService {
         return post;
     }
 
+    public Post createPostReplyAndReturn(String body, int parentPostId) {
+        Post parentPost = postRepository.findById(parentPostId)
+                .orElseThrow(() -> new RuntimeException("Post not found"));
+
+        Post post = new Post();
+        post.setBody(body);
+        post.setParentThread(parentPost.getParentThread());
+        post.setParentPost(parentPost);
+        post.setTimestamp(new Date());
+        postRepository.save(post);
+        return post;
+    }
+
     public void deletePostById(int postId) {
         postRepository.deleteById(postId);
     }

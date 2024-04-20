@@ -12,5 +12,7 @@ CREATE TABLE IF NOT EXISTS post (
     body TEXT NOT NULL,
     timestamp TIMESTAMP NOT NULL,
     thread_id INT NOT NULL,
-    FOREIGN KEY (thread_id) REFERENCES thread(id)
+    parent_post_id INT,
+    FOREIGN KEY (thread_id) REFERENCES thread(id),
+    FOREIGN KEY (parent_post_id) REFERENCES post(id)
 );

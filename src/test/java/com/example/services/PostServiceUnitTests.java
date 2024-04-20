@@ -45,6 +45,18 @@ public class PostServiceUnitTests {
     }
 
     @Test
+    void createPostReplyAndReturn() {
+        doReturn(Optional.of(new Post()))
+                .when(postRepository)
+                .findById(anyInt());
+
+        postService.createPostReplyAndReturn("T35T!", 1);
+
+        verify(postRepository, times(1))
+                .save(any(Post.class));
+    }
+
+    @Test
     void deletePostById() {
         postService.deletePostById(1);
 

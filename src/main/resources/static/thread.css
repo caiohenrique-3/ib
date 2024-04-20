@@ -92,3 +92,10 @@ form ::placeholder {
 form :-ms-input-placeholder {
   color: #6272a4;
 }
+
+#replyingTo button {
+  background-color: #f8f8f2;
+  color: #282a2b;
+  border: 0.06rem solid #f8f8f2;
+  padding: 0.5rem;
+}

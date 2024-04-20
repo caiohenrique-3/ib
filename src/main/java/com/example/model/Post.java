@@ -11,6 +11,10 @@ public class Post extends BaseEntity {
     @JoinColumn(name = "thread_id")
     private Thread parentThread;
 
+    @ManyToOne
+    @JoinColumn(name = "parent_post_id")
+    private Post parentPost;
+
     public String getBody() {
         return body;
     }
@@ -25,5 +29,13 @@ public class Post extends BaseEntity {
 
     public void setParentThread(Thread parentThread) {
         this.parentThread = parentThread;
+    }
+
+    public Post getParentPost() {
+        return parentPost;
+    }
+
+    public void setParentPost(Post parentPost) {
+        this.parentPost = parentPost;
     }
 }

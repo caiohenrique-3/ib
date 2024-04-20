@@ -1,5 +1,6 @@
 package com.example.controllers;
 
+import com.example.model.Post;
 import com.example.model.Thread;
 import com.example.services.PostService;
 import com.example.services.ThreadService;
@@ -49,9 +50,18 @@ public class MainController {
         throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Thread Not Found");
     }
 
-    @PostMapping("/replyTo/{id}")
-    public String createReply(@PathVariable int id, @RequestParam String body) {
-        postService.createPostAndReturn(body, id);
-        return "redirect:/threads/" + id;
+    @PostMapping("/replyTo/{threadId}")
+    public String createReply(@PathVariable int threadId,
+                              @RequestParam(required = false) Integer id, @RequestParam String body) {
+        if (id == null) {
+            id = threadId;
+        }
+        Optional<Post> parentPost = postService.getPostById(id);
+        if (parentPost.isPresent()) {
+            postService.createPostReplyAndReturn(body, id);
+        } else {
+            postService.createPostAndReturn(body, id);
+        }
+        return "redirect:/threads/" + threadId;
     }
 }

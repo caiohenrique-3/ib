@@ -76,7 +76,7 @@ public class MainControllerUnitTests {
         doReturn(p).when(postService).createPostAndReturn(anyString(), anyInt());
 
         String returnValue = mainController
-                .createReply(0, "test");
+                .createReply(0, 0, "test");
 
         assertEquals("redirect:/threads/0", returnValue);
     }

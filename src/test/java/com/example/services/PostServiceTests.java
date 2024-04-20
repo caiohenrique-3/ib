@@ -44,6 +44,27 @@ public class PostServiceTests {
     }
 
     @Test
+    void testCreatePostReplyAndReturn() {
+        Thread t = threadService
+                .createThreadAndReturn("hello", "hello guys");
+
+        Post createdPost = postService
+                .createPostAndReturn("good morning", t.getId());
+
+        Post createdReply = postService
+                .createPostReplyAndReturn("hi", createdPost.getId());
+
+        assertTrue(postService.getPostById(
+                createdPost.getId()).isPresent());
+
+        assertTrue(postService.getPostById(
+                createdReply.getId()).isPresent());
+
+        assertEquals(createdPost.getId(),
+                createdReply.getParentPost().getId());
+    }
+
+    @Test
     void deletePostById() {
         threadService.createThreadAndReturn("hello", "hello guys");
 

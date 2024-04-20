@@ -19,21 +19,54 @@
 
     <div th:each="post: ${thread.posts}">
         <p th:text="${post.getFormattedInfo}"></p>
-        <p th:text="${post.body}">></p>
+
+        <p th:if="${post.parentPost != null}"><a th:href="@{/post/{id}(id=${post.parentPost.id})}"
+                                                 th:text="${'>>' + post.parentPost.id}"></a></p>
+
+        <p th:text="${post.body}"></p>
+
+        <button type="button"
+                th:data-post-id="${post.id}"
+                onclick="populateReplyForm(this.getAttribute('data-post-id'))">Reply
+        </button>
     </div>
 
-    <form method="post" th:action="@{/replyTo/{id}(id=${thread.id})}">
+    <form id="replyForm" method="post" th:action="@{/replyTo/{id}(id=${thread.id})}">
+        <div id="replyingTo" style="display: none;">
+            <span id="replyingToText"></span>
+            <button type="button" onclick="clearReplyingTo()">Clear</button>
+        </div>
+
         <textarea
+                id="replyBody"
                 name="body"
                 rows="10"
                 cols="30"
                 placeholder="Body of the reply"
                 required
-        ></textarea
-        ><br/>
+        ></textarea><br/>
+
+        <input type="hidden" id="parentId" name="id"/>
 
         <button type="submit" id="submit-button">Reply</button>
     </form>
+
+    <script>
+        function populateReplyForm(postId, postBody) {
+            document.getElementById('replyBody').value = '';
+            document.getElementById('parentId').value = postId;
+            var replyingTo = document.getElementById('replyingTo');
+            replyingTo.textContent = 'Replying to: ' + postId;
+            replyingTo.style.display = 'block';
+            }
+
+        function clearReplyingTo() {
+            if (confirm('Are you sure you want to clear the reply?')) {
+                document.getElementById('replyingTo').style.display = 'none';
+                document.getElementById('replyingToText').textContent = '';
+                }
+            }
+    </script>
 </main>
 </body>
 </html>
