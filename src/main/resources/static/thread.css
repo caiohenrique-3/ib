@@ -99,3 +99,8 @@ form :-ms-input-placeholder {
   border: 0.06rem solid #f8f8f2;
   padding: 0.5rem;
 }
+
+.highlight {
+    border-color: #f8f8f2;
+    background-color: #282a2b;
+}
