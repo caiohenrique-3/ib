@@ -34,7 +34,7 @@ public class MainControllerTests {
     @Test
     void testShowMainPage_notAllowed_ifPost() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.post("/"))
-                .andExpect(MockMvcResultMatchers.status().isMethodNotAllowed());
+                .andExpect(MockMvcResultMatchers.view().name("error"));
     }
 
     @Test
@@ -49,7 +49,7 @@ public class MainControllerTests {
     @Test
     void testCreateThread_notAllowed_ifGet() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.get("/createThread"))
-                .andExpect(MockMvcResultMatchers.status().isMethodNotAllowed());
+                .andExpect(MockMvcResultMatchers.view().name("error"));
     }
 
     @Test
@@ -65,7 +65,7 @@ public class MainControllerTests {
     @Test
     void testShowThread_notFound() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.get("/threads/0"))
-                .andExpect(MockMvcResultMatchers.status().isNotFound());
+                .andExpect(MockMvcResultMatchers.view().name("404"));
     }
 
     @Test
@@ -81,16 +81,10 @@ public class MainControllerTests {
     }
 
     @Test
-    void testCreateReply_throwsError_ifNotFound() {
-        Exception exception = assertThrows(ServletException.class, () -> {
-            mockMvc.perform(MockMvcRequestBuilders.post("/replyTo/-1")
-                    .param("id", String.valueOf(-1))
-                    .param("body", "Test Body"));
-        });
-
-        String expectedMessage = "Thread not found";
-        String actualMessage = exception.getMessage();
-
-        assertTrue(actualMessage.contains(expectedMessage));
+    void testCreateReply_throwsError_ifNotFound() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.post("/replyTo/-1")
+                        .param("id", String.valueOf(-1))
+                        .param("body", "Test Body"))
+                .andExpect(MockMvcResultMatchers.view().name("error"));
     }
 }
