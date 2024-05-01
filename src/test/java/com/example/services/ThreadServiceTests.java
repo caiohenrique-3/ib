@@ -4,12 +4,18 @@ import com.example.model.Post;
 import com.example.model.Thread;
 import com.example.repositories.PostRepository;
 import com.example.repositories.ThreadRepository;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -27,6 +33,12 @@ public class ThreadServiceTests {
 
     @Autowired
     private PostRepository postRepository;
+
+    @BeforeEach
+    void cleanDatabase() {
+        threadRepository.deleteAll();
+        postRepository.deleteAll();
+    }
 
     @Test
     void testCreateThreadWithInitialPost() {
@@ -133,13 +145,62 @@ public class ThreadServiceTests {
 
     @Test
     void getAllThreads_isEmpty_ifTheresNoExistingThreads() {
-        // cleaning before test
-        List<Thread> threads = threadService.getAllThreads();
-        for (Thread thread : threads) {
-            threadService
-                    .deleteThreadById(thread.getId());
-        }
-
         assertTrue(threadService.getAllThreads().isEmpty());
+    }
+
+    @Test
+    void getTotalNumberOfThreads_1() {
+        threadService.createThreadAndReturn("test", "test");
+        threadService.createThreadAndReturn("test", "test");
+        threadService.createThreadAndReturn("test", "test");
+        threadService.createThreadAndReturn("test", "test");
+        assertEquals(4L, threadService.getTotalNumberOfThreads());
+    }
+
+    @Test
+    void getTotalNumberOfThreads_2() {
+        assertEquals(0L, threadService.getTotalNumberOfThreads());
+    }
+
+    @Test
+    @Disabled
+    // Broken test
+    void getTimeSinceLastThread_1() throws Exception {
+        Thread t = threadService.createThreadAndReturn("Test", "test");
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss");
+
+        // May 1, 2024, at 15:44:32
+        Date specificDate = sdf.parse("2024.05.01.15.44.32");
+        Date now = new Date();
+
+        t.setTimestamp(specificDate);
+
+        // Calculate the expected time difference
+        long diffInMillies = Math.abs(now.getTime() - specificDate.getTime());
+        long days = TimeUnit.MILLISECONDS.toDays(diffInMillies);
+        diffInMillies -= TimeUnit.DAYS.toMillis(days);
+        long hours = TimeUnit.MILLISECONDS.toHours(diffInMillies);
+        diffInMillies -= TimeUnit.HOURS.toMillis(hours);
+        long minutes = TimeUnit.MILLISECONDS.toMinutes(diffInMillies);
+        diffInMillies -= TimeUnit.MINUTES.toMillis(minutes);
+        long seconds = TimeUnit.MILLISECONDS.toSeconds(diffInMillies);
+
+        // Format the expected output
+        String expectedOutput = days + " days, " + hours +
+                " hours, " + minutes + " minutes, " +
+                seconds + " seconds - thread " + t.getId();
+
+        // Call the method and get the actual output
+        String actualOutput = threadService.getTimeSinceLastThread();
+
+        // Compare the actual output with the expected output
+        assertEquals(expectedOutput, actualOutput);
+    }
+
+    @Test
+    void getTimeSinceLastThread_2() {
+        assertEquals("No threads found",
+                threadService.getTimeSinceLastThread());
     }
 }

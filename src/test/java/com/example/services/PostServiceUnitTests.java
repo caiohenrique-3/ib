@@ -99,4 +99,21 @@ public class PostServiceUnitTests {
         assertThrows(RuntimeException.class,
                 () -> postService.getAllPostsInThreadById(1));
     }
+
+    @Test
+    void getNumberOfTotalPosts_callsCorrectMethod() {
+        postService.getTotalNumberOfPosts();
+        verify(postRepository, times(1)).count();
+    }
+
+    @Test
+    void getNumberOfTotalPosts_returnsCorrectValue() {
+        when(postRepository.count()).thenReturn(35L);
+        assertEquals(35L, postService.getTotalNumberOfPosts());
+    }
+
+    @Test
+    void getNumberOfTotalPosts_returnsZero() {
+        assertEquals(0L, postService.getTotalNumberOfPosts());
+    }
 }

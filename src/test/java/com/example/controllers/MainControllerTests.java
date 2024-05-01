@@ -1,9 +1,13 @@
 package com.example.controllers;
 
 
+import com.example.model.Post;
 import com.example.model.Thread;
+import com.example.repositories.PostRepository;
+import com.example.repositories.ThreadRepository;
+import com.example.services.PostService;
 import com.example.services.ThreadService;
-import jakarta.servlet.ServletException;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -11,9 +15,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
-
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -23,6 +24,21 @@ public class MainControllerTests {
 
     @Autowired
     ThreadService threadService;
+
+    @Autowired
+    PostService postService;
+
+    @Autowired
+    ThreadRepository threadRepository;
+
+    @Autowired
+    PostRepository postRepository;
+
+    @BeforeEach
+    void clearDatabase() {
+        postRepository.deleteAll();
+        threadRepository.deleteAll();
+    }
 
     @Test
     void testShowMainPage() throws Exception {
@@ -86,5 +102,30 @@ public class MainControllerTests {
                         .param("id", String.valueOf(-1))
                         .param("body", "Test Body"))
                 .andExpect(MockMvcResultMatchers.view().name("error"));
+    }
+
+    @Test
+    void showStatsPage_returnsCorrectValues() throws Exception {
+        Thread t = threadService.createThreadAndReturn("test", "test");
+        Post p1 = postService.createPostAndReturn("test", t.getId());
+        Post p2 = postService.createPostAndReturn("test", t.getId());
+        Post p3 = postService.createPostAndReturn("test", t.getId());
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/stats"))
+                .andExpect(MockMvcResultMatchers.view().name("stats"))
+                .andExpect(MockMvcResultMatchers.model().attribute("totalThreads", 1L))
+                .andExpect(MockMvcResultMatchers.model().attribute("totalPosts", 3L))
+                .andExpect(MockMvcResultMatchers.model().attributeExists("timeSinceLastPost"))
+                .andExpect(MockMvcResultMatchers.model().attributeExists("timeSinceLastThread"));
+    }
+
+    @Test
+    void showStatsPage_returnsNull_ifDatabaseEmpty() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.get("/stats"))
+                .andExpect(MockMvcResultMatchers.view().name("stats"))
+                .andExpect(MockMvcResultMatchers.model().attribute("totalThreads", 0L))
+                .andExpect(MockMvcResultMatchers.model().attribute("totalPosts", 0L))
+                .andExpect(MockMvcResultMatchers.model().attribute("timeSinceLastPost", "No posts found"))
+                .andExpect(MockMvcResultMatchers.model().attribute("timeSinceLastThread", "No threads found"));
     }
 }

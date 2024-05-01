@@ -80,4 +80,21 @@ public class MainControllerUnitTests {
 
         assertEquals("redirect:/threads/0", returnValue);
     }
+
+    @Test
+    void showStatsPage() {
+        when(threadService.getTotalNumberOfThreads()).thenReturn(10L);
+        when(postService.getTotalNumberOfPosts()).thenReturn(20L);
+        when(postService.getTimeSinceLastPost()).thenReturn("10 minutes ago");
+        when(threadService.getTimeSinceLastThread()).thenReturn("20 minutes ago");
+
+        Model model = mock(Model.class);
+        String viewName = mainController.showStatsPage(model);
+
+        assertEquals("stats", viewName);
+        verify(model).addAttribute("totalThreads", 10L);
+        verify(model).addAttribute("totalPosts", 20L);
+        verify(model).addAttribute("timeSinceLastPost", "10 minutes ago");
+        verify(model).addAttribute("timeSinceLastThread", "20 minutes ago");
+    }
 }

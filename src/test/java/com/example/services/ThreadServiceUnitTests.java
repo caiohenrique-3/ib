@@ -70,4 +70,21 @@ public class ThreadServiceUnitTests {
     void getAllThreads_returnsEmptyList() {
         assertTrue(threadService.getAllThreads().isEmpty());
     }
+
+    @Test
+    void getNumberOfTotalThreads_callsCorrectMethod() {
+        threadService.getTotalNumberOfThreads();
+        verify(threadRepository, times(1)).count();
+    }
+
+    @Test
+    void getNumberOfTotalThreads_returnsCorrectValue() {
+        when(threadRepository.count()).thenReturn(35L);
+        assertEquals(35L, threadService.getTotalNumberOfThreads());
+    }
+
+    @Test
+    void getNumberOfTotalThreads_returnsZero() {
+        assertEquals(0L, threadService.getTotalNumberOfThreads());
+    }
 }

@@ -14,6 +14,7 @@ body {
 
 header {
   text-align: center;
+  position: relative;
 }
 
 header input,
@@ -52,6 +53,21 @@ header ::placeholder {
 
 header :-ms-input-placeholder {
   color: #6272a4;
+}
+
+#site-stats-button {
+  position: absolute;
+  top: 0;
+  right: 0;
+  color: #f8f8f2;
+  padding-inline-end: 0.5rem;
+  text-underline-offset: 0.2rem;
+}
+
+@media(max-width: 26.25rem){
+    header h2 {
+        padding-block-start: 2rem;
+    }
 }
 
 main {

@@ -1,0 +1,31 @@
+body {
+    background-color: #181a1b;
+    color: #f8f8f2;
+    font-family: Arial, sans-serif;
+    font-size: 1rem;
+}
+
+.stats-container {
+    margin: 20px;
+    border: 0.06rem solid #f8f8f2;
+    background-color: #282a2b;
+    padding: 1rem;
+}
+
+.stats-container table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.stats-container table th, .stats-container table td {
+    border: 1px solid #f8f8f2;
+    padding: 0.5rem;
+    text-align: left;
+}
+
+@media (max-width: 400px) {
+    .stats-container table th, .stats-container table td {
+        font-size: 0.8rem;
+        word-wrap: break-word;
+    }
+}

@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Site Statistics</title>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <link href="/styles/stats.css" rel="stylesheet"/>
+    <link href="/images/favicon.svg" rel="icon" type="image/x-icon"/>
+</head>
+<body>
+<header>
+    <a href="/" id="home-button">Home</a>
+</header>
+
+<main>
+    <h3>General Statistics</h3>
+    <div class="stats-container">
+        <table>
+            <tr>
+                <th>Statistic</th>
+                <th>Value</th>
+            </tr>
+            <tr>
+                <td>Total number of threads</td>
+                <td th:text="${totalThreads}"></td>
+            </tr>
+            <tr>
+                <td>Total number of replies</td>
+                <td th:text="${totalPosts}"></td>
+            </tr>
+            <tr>
+                <td>Time since last reply</td>
+                <td th:text="${timeSinceLastPost}"></td>
+            </tr>
+            <tr>
+                <td>Time since last thread</td>
+                <td th:text="${timeSinceLastThread}"></td>
+            </tr>
+        </table>
+    </div>
+</main>
+</body>
+</html>

@@ -64,4 +64,18 @@ public class MainController {
         }
         return "redirect:/threads/" + threadId;
     }
+
+    @GetMapping("/stats")
+    public String showStatsPage(Model model) {
+        model.addAttribute("totalThreads",
+                threadService.getTotalNumberOfThreads());
+        model.addAttribute("totalPosts",
+                postService.getTotalNumberOfPosts());
+        model.addAttribute("timeSinceLastPost",
+                postService.getTimeSinceLastPost());
+        model.addAttribute("timeSinceLastThread",
+                threadService.getTimeSinceLastThread());
+
+        return "stats";
+    }
 }
