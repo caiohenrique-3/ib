@@ -6,7 +6,13 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
+
+import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
@@ -61,14 +67,22 @@ public class ThreadServiceUnitTests {
 
     @Test
     void getAllThreads() {
-        threadService.getAllThreads();
+        Pageable pageable = PageRequest.of(0, 20);
+
+        threadService.getAllThreads(pageable);
+
         verify(threadRepository, times(1))
-                .findAll();
+                .findAll(pageable);
     }
 
     @Test
     void getAllThreads_returnsEmptyList() {
-        assertTrue(threadService.getAllThreads().isEmpty());
+        Pageable pageable = PageRequest.of(0, 20);
+
+        when(threadService.getAllThreads(any(Pageable.class)))
+                .thenReturn(new PageImpl<>(new ArrayList<>()));
+
+        assertTrue(threadService.getAllThreads(pageable).isEmpty());
     }
 
     @Test

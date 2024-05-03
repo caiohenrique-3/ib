@@ -3,7 +3,9 @@ package com.example.services;
 import com.example.model.Post;
 import com.example.model.Thread;
 import com.example.repositories.ThreadRepository;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -39,11 +41,8 @@ public class ThreadService {
         return threadRepository.findById(threadId);
     }
 
-    public List<Thread> getAllThreads() {
-        Iterable<Thread> source = threadRepository.findAll();
-        List<Thread> threads = new ArrayList<>();
-        source.forEach(threads::add);
-        return threads;
+    public Page<Thread> getAllThreads(Pageable pageable) {
+        return threadRepository.findAll(pageable);
     }
 
     public long getTotalNumberOfThreads() {

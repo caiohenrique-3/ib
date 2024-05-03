@@ -10,6 +10,9 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 
 import java.text.SimpleDateFormat;
@@ -137,15 +140,19 @@ public class ThreadServiceTests {
         threadService.createThreadAndReturn("hello", "this is a test!");
         threadService.createThreadAndReturn("hello", "this is a test!");
         threadService.createThreadAndReturn("hello", "this is a test!");
-        List<Thread> threads = threadService.getAllThreads();
 
-        assertFalse(threadService.getAllThreads().isEmpty());
-        assertEquals(4, threads.size());
+        Pageable pageable = PageRequest.of(0, 20);
+
+        Page<Thread> threads = threadService.getAllThreads(pageable);
+
+        assertFalse(threadService.getAllThreads(pageable).isEmpty());
+        assertEquals(4L, threads.getTotalElements());
     }
 
     @Test
     void getAllThreads_isEmpty_ifTheresNoExistingThreads() {
-        assertTrue(threadService.getAllThreads().isEmpty());
+        Pageable pageable = PageRequest.of(0, 20);
+        assertTrue(threadService.getAllThreads(pageable).isEmpty());
     }
 
     @Test

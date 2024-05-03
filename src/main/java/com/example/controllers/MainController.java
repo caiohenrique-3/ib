@@ -4,6 +4,9 @@ import com.example.model.Post;
 import com.example.model.Thread;
 import com.example.services.PostService;
 import com.example.services.ThreadService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -26,8 +29,11 @@ public class MainController {
     }
 
     @GetMapping("/")
-    public String showMainPage(Model model) {
-        model.addAttribute("threads", threadService.getAllThreads());
+    public String showMainPage(Model model, @RequestParam(defaultValue = "0") int page) {
+        Pageable pageable = PageRequest.of(page, 20);
+        Page<Thread> threadPage = threadService.getAllThreads(pageable);
+        model.addAttribute("threads", threadPage.getContent());
+        model.addAttribute("currentPage", page);
         return "index";
     }
 

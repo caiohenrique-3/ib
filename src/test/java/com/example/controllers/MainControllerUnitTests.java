@@ -9,8 +9,13 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.ui.Model;
 
+import java.util.ArrayList;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -36,12 +41,18 @@ public class MainControllerUnitTests {
     @Test
     void showMainPage() {
         Model model = Mockito.mock(Model.class);
-        String returnValue = mainController.showMainPage(model);
+
+        Pageable pageable = PageRequest.of(0, 20);
+
+        when(threadService.getAllThreads(any(Pageable.class)))
+                .thenReturn(new PageImpl<>(new ArrayList<>()));
+
+        String returnValue = mainController.showMainPage(model, 0);
 
         verify(threadService, times(1))
-                .getAllThreads();
+                .getAllThreads(pageable);
 
-        verify(model, times(1))
+        verify(model, times(2))
                 .addAttribute(anyString(), any(Object.class));
 
         assertEquals("index", returnValue);
