@@ -18,12 +18,12 @@
         <p th:text="${thread.initialPostBody}"></p>
     </div>
 
-    <div th:each="post: ${thread.posts}" th:data-post-id="${post.id}">
+    <div th:each="post: ${thread.posts}" th:id="'post-' + ${post.id}" th:data-post-id="${post.id}">
         <p th:text="${post.getFormattedInfo}"></p>
 
         <img th:if="${post.imageUrl != null && !post.imageUrl.isEmpty()}" th:src="${post.imageUrl}" alt="Image"/>
 
-        <p th:if="${post.parentPost != null}"><a th:href="@{/post/{id}(id=${post.parentPost.id})}"
+        <p th:if="${post.parentPost != null}"><a th:href="'#post-' + ${post.parentPost.id}"
                                                  th:text="${'>>' + post.parentPost.id}"></a></p>
 
         <p th:text="${post.body}"></p>
