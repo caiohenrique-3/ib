@@ -57,6 +57,18 @@ public class MainController {
         throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Thread Not Found");
     }
 
+    @GetMapping("/posts/{id}")
+    public String showPost(@PathVariable int id, Model model) {
+        Optional<Post> p = postService.getPostById(id);
+
+        if (p.isPresent()) {
+            model.addAttribute("post", p.get());
+            return "post";
+        }
+
+        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Post Not Found");
+    }
+
     @PostMapping("/replyTo/{threadId}")
     public String createReply(@PathVariable int threadId,
                               @RequestParam(required = false) Integer id,

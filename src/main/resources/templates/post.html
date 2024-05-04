@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title></title>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <link href="/styles/post.css" rel="stylesheet"/>
+    <link href="/images/favicon.svg" rel="icon" type="image/x-icon"/>
+</head>
+<body>
+<header>
+    <<a href="/">Homepage</a>
+    <a th:href="@{/threads/{id}(id=${post.parentThread.getId})}">Go to parent thread</a>
+</header>
+
+<main>
+    <div th:id="'post-' + ${post.id}" th:data-post-id="${post.id}">
+        <p th:text="${post.getFormattedInfo}"></p>
+
+        <img th:if="${post.imageUrl != null && !post.imageUrl.isEmpty()}" th:src="${post.imageUrl}" alt="Image"/>
+
+        <p th:if="${post.parentPost != null}">
+            <a th:href="@{'/posts/' + ${post.parentPost.id}}" th:text="${'>>' + post.parentPost.id}"></a>
+        </p>
+
+        <p th:text="${post.body}"></p>
+    </div>
+</main>
+</body>
+</html>

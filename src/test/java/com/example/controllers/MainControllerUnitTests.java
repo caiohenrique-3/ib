@@ -82,6 +82,22 @@ public class MainControllerUnitTests {
     }
 
     @Test
+    void showPost() {
+        Thread t = mock(Thread.class);
+        doReturn(Optional.of(t)).when(threadService).getThreadById(anyInt());
+
+        Post p = mock(Post.class);
+        doReturn(Optional.of(t)).when(postService).getPostById(anyInt());
+
+        String returnValue = mainController
+                .showPost(1, mock(Model.class));
+
+        verify(postService, times(1))
+                .getPostById(1);
+        assertEquals("post", returnValue);
+    }
+
+    @Test
     void createReply() {
         Post p = mock(Post.class);
         doReturn(p).when(postService)

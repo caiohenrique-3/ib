@@ -12,7 +12,10 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.ResultMatcher;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
@@ -127,5 +130,31 @@ public class MainControllerTests {
                 .andExpect(MockMvcResultMatchers.model().attribute("totalPosts", 0L))
                 .andExpect(MockMvcResultMatchers.model().attribute("timeSinceLastPost", "No posts found"))
                 .andExpect(MockMvcResultMatchers.model().attribute("timeSinceLastThread", "No threads found"));
+    }
+
+    void testShowPost_notFound() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.get("/posts/0"))
+                .andExpect(MockMvcResultMatchers.view().name("404"))
+                .andExpect(MockMvcResultMatchers.status().isNotFound());
+    }
+
+    @Test
+    void testShowPost() throws Exception {
+        Thread t = threadService
+                .createThreadAndReturn("test", "test", null);
+
+        Post p1 = postService
+                .createPostAndReturn("test", t.getId(), null);
+
+        Post p2 = postService
+                .createPostReplyAndReturn("test", p1.getId(), null);
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/posts/" + p1.getId()))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.view().name("post"));
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/posts/" + p2.getId()))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.view().name("post"));
     }
 }
