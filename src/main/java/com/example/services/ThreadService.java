@@ -24,11 +24,12 @@ public class ThreadService {
         this.postService = postService;
     }
 
-    public Thread createThreadAndReturn(String title, String body) {
+    public Thread createThreadAndReturn(String title, String body, String imageUrl) {
         Thread thread = new Thread();
         thread.setTitle(title);
         thread.setInitialPostBody(body);
         thread.setTimestamp(new Date());
+        thread.setImageUrl(imageUrl);
         threadRepository.save(thread);
         return thread;
     }

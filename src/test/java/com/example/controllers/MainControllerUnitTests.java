@@ -61,10 +61,10 @@ public class MainControllerUnitTests {
     @Test
     void createThread() {
         String text = "test text plac";
-        String returnValue = mainController.createThread(text, text);
+        String returnValue = mainController.createThread(text, text, null);
 
         verify(threadService, times(1))
-                .createThreadAndReturn(text, text);
+                .createThreadAndReturn(text, text, null);
         assertEquals("redirect:/", returnValue);
     }
 
@@ -84,10 +84,11 @@ public class MainControllerUnitTests {
     @Test
     void createReply() {
         Post p = mock(Post.class);
-        doReturn(p).when(postService).createPostAndReturn(anyString(), anyInt());
+        doReturn(p).when(postService)
+                .createPostAndReturn(anyString(), anyInt(), anyString());
 
         String returnValue = mainController
-                .createReply(0, 0, "test");
+                .createReply(0, 0, "test", null);
 
         assertEquals("redirect:/threads/0", returnValue);
     }

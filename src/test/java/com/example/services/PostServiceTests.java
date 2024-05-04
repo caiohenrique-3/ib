@@ -46,10 +46,10 @@ public class PostServiceTests {
     @Test
     void testCreatePostAndReturn() {
         Thread t = threadService
-                .createThreadAndReturn("hello", "hello guys");
+                .createThreadAndReturn("hello", "hello guys", null);
 
         Post createdPost = postService
-                .createPostAndReturn("good morning", t.getId());
+                .createPostAndReturn("good morning", t.getId(), null);
 
         assertTrue(postService.getPostById(
                 createdPost.getId()).isPresent());
@@ -58,13 +58,13 @@ public class PostServiceTests {
     @Test
     void testCreatePostReplyAndReturn() {
         Thread t = threadService
-                .createThreadAndReturn("hello", "hello guys");
+                .createThreadAndReturn("hello", "hello guys", null);
 
         Post createdPost = postService
-                .createPostAndReturn("good morning", t.getId());
+                .createPostAndReturn("good morning", t.getId(), null);
 
         Post createdReply = postService
-                .createPostReplyAndReturn("hi", createdPost.getId());
+                .createPostReplyAndReturn("hi", createdPost.getId(), null);
 
         assertTrue(postService.getPostById(
                 createdPost.getId()).isPresent());
@@ -78,10 +78,11 @@ public class PostServiceTests {
 
     @Test
     void deletePostById() {
-        Thread t = threadService.createThreadAndReturn("hello", "hello guys");
+        Thread t = threadService
+                .createThreadAndReturn("hello", "hello guys", null);
 
         Post createdPost = postService
-                .createPostAndReturn("good morning sir!", t.getId());
+                .createPostAndReturn("good morning sir!", t.getId(), null);
 
         postService
                 .deletePostById(createdPost.getId());
@@ -93,10 +94,10 @@ public class PostServiceTests {
     @Test
     void getPostById() {
         Thread t = threadService
-                .createThreadAndReturn("hello", "hello test");
+                .createThreadAndReturn("hello", "hello test", null);
 
-        Post p = postService.createPostAndReturn(
-                "good morning test!", t.getId());
+        Post p = postService
+                .createPostAndReturn("good morning test!", t.getId(), null);
 
         assertNotEquals(null, postService
                 .getPostById(p.getId()));
@@ -121,11 +122,11 @@ public class PostServiceTests {
     @Test
     void getAllPostsInThreadById() {
         Thread thread = threadService
-                .createThreadAndReturn("hello", "hello b");
+                .createThreadAndReturn("hello", "hello b", null);
 
-        postService.createPostAndReturn("good morning!", thread.getId());
-        postService.createPostAndReturn("hallo", thread.getId());
-        postService.createPostAndReturn("woooow 30", thread.getId());
+        postService.createPostAndReturn("good morning!", thread.getId(), null);
+        postService.createPostAndReturn("hallo", thread.getId(), null);
+        postService.createPostAndReturn("woooow 30", thread.getId(), null);
 
         List<Post> posts = postService.getAllPostsInThreadById(thread.getId());
 
@@ -144,7 +145,7 @@ public class PostServiceTests {
     @Test
     void getAllPostsInThreadById_returnsEmpty_ifNoRepliesToThread() {
         Thread t = threadService
-                .createThreadAndReturn("hello", "hello saars");
+                .createThreadAndReturn("hello", "hello saars", null);
 
         List<Post> posts = postService
                 .getAllPostsInThreadById(t.getId());
@@ -160,9 +161,9 @@ public class PostServiceTests {
 
     @Test
     void getTotalNumberOfPosts_1() {
-        Thread t = threadService.createThreadAndReturn("test", "test");
-        Post p1 = postService.createPostAndReturn("test", t.getId());
-        Post p2 = postService.createPostReplyAndReturn("test", p1.getId());
+        Thread t = threadService.createThreadAndReturn("test", "test", null);
+        Post p1 = postService.createPostAndReturn("test", t.getId(), null);
+        Post p2 = postService.createPostReplyAndReturn("test", p1.getId(), null);
         assertEquals(2L, postService.getTotalNumberOfPosts());
     }
 
@@ -174,9 +175,9 @@ public class PostServiceTests {
     @Test
     @Disabled
     void getTimeSinceLastPost_1() throws Exception {
-        Thread t = threadService.createThreadAndReturn("test", "test");
+        Thread t = threadService.createThreadAndReturn("test", "test", null);
 
-        Post p = postService.createPostAndReturn("Test", t.getId());
+        Post p = postService.createPostAndReturn("Test", t.getId(), null);
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss");
 

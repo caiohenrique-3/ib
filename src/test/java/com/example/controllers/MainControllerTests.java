@@ -71,7 +71,7 @@ public class MainControllerTests {
     @Test
     void testShowThread() throws Exception {
         Thread t = threadService
-                .createThreadAndReturn("test", "test");
+                .createThreadAndReturn("test", "test", null);
 
         mockMvc.perform(MockMvcRequestBuilders.get("/threads/" + t.getId()))
                 .andExpect(MockMvcResultMatchers.status().isOk())
@@ -87,7 +87,7 @@ public class MainControllerTests {
     @Test
     void testCreateReply() throws Exception {
         Thread t = threadService
-                .createThreadAndReturn("test", "test");
+                .createThreadAndReturn("test", "test", null);
 
         mockMvc.perform(MockMvcRequestBuilders.post("/replyTo/" + t.getId())
                         .param("id", String.valueOf(t.getId()))
@@ -106,10 +106,10 @@ public class MainControllerTests {
 
     @Test
     void showStatsPage_returnsCorrectValues() throws Exception {
-        Thread t = threadService.createThreadAndReturn("test", "test");
-        Post p1 = postService.createPostAndReturn("test", t.getId());
-        Post p2 = postService.createPostAndReturn("test", t.getId());
-        Post p3 = postService.createPostAndReturn("test", t.getId());
+        Thread t = threadService.createThreadAndReturn("test", "test", null);
+        Post p1 = postService.createPostAndReturn("test", t.getId(), null);
+        Post p2 = postService.createPostAndReturn("test", t.getId(), null);
+        Post p3 = postService.createPostAndReturn("test", t.getId(), null);
 
         mockMvc.perform(MockMvcRequestBuilders.get("/stats"))
                 .andExpect(MockMvcResultMatchers.view().name("stats"))

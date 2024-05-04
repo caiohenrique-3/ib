@@ -42,6 +42,7 @@ header input {
 
 header textarea {
   padding: 0.5rem;
+  margin-block-end: 0.5rem;
   border: none;
   max-width: 100%;
 }
@@ -100,4 +101,9 @@ main a:visited {
 main p {
   color: #a9acb1;
   margin-bottom: 0.3rem;
+}
+
+img {
+    max-inline-size: 12.5rem;
+    block-size: auto;
 }

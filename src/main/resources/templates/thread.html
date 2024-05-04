@@ -13,12 +13,15 @@
 <main>
     <div>
         <p th:text="${thread.getFormattedInfo}"></p>
+        <img th:if="${thread.imageUrl != null && !thread.imageUrl.isEmpty()}" th:src="${thread.imageUrl}" alt="Image"/>
         <h3 th:text="${thread.title}"></h3>
         <p th:text="${thread.initialPostBody}"></p>
     </div>
 
     <div th:each="post: ${thread.posts}" th:data-post-id="${post.id}">
         <p th:text="${post.getFormattedInfo}"></p>
+
+        <img th:if="${post.imageUrl != null && !post.imageUrl.isEmpty()}" th:src="${post.imageUrl}" alt="Image"/>
 
         <p th:if="${post.parentPost != null}"><a th:href="@{/post/{id}(id=${post.parentPost.id})}"
                                                  th:text="${'>>' + post.parentPost.id}"></a></p>
@@ -45,6 +48,8 @@
                 placeholder="Body of the reply"
                 required
         ></textarea><br/>
+
+        <input type="text" name="imageUrl" id="image-url-input" placeholder="Image URL"/><br/>
 
         <input type="hidden" id="parentId" name="id"/>
 

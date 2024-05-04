@@ -17,6 +17,8 @@ public abstract class BaseEntity {
     @Column(nullable = false)
     private Date timestamp;
 
+    private String imageUrl;
+
     public int getId() {
         return id;
     }
@@ -31,6 +33,14 @@ public abstract class BaseEntity {
 
     public void setTimestamp(Date timestamp) {
         this.timestamp = timestamp;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 
     public String getFormattedInfo() {

@@ -38,7 +38,8 @@ public class PostServiceUnitTests {
                 .when(threadRepository)
                 .findById(anyInt());
 
-        postService.createPostAndReturn("T35T!", 1);
+        postService
+                .createPostAndReturn("T35T!", 1, null);
 
         verify(postRepository, times(1))
                 .save(any(Post.class));
@@ -50,7 +51,8 @@ public class PostServiceUnitTests {
                 .when(postRepository)
                 .findById(anyInt());
 
-        postService.createPostReplyAndReturn("T35T!", 1);
+        postService
+                .createPostReplyAndReturn("T35T!", 1, null);
 
         verify(postRepository, times(1))
                 .save(any(Post.class));

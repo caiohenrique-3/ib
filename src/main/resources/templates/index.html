@@ -31,6 +31,8 @@
                 placeholder="Body of your thread"
         ></textarea
         ><br/>
+
+        <input type="text" name="imageUrl" placeholder="Image URL"/><br/>
     </form>
 </header>
 
@@ -38,6 +40,9 @@
     <h2>Discussions</h2>
     <div th:each="thread : ${threads}">
         <p th:text="${thread.getFormattedInfo}"></p>
+
+        <img th:if="${thread.imageUrl != null && !thread.imageUrl.isEmpty()}" th:src="${thread.imageUrl}" alt="Image"/>
+
         <h3><a th:href="@{/threads/{id}(id=${thread.id})}" th:text="${thread.title}"></a></h3>
         <p th:text="${thread.initialPostBody}"></p>
         <p th:text="${#lists.size(thread.posts)} + ' replies'"></p>

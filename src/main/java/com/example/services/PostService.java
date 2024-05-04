@@ -22,7 +22,7 @@ public class PostService {
         this.threadRepository = threadRepository;
     }
 
-    public Post createPostAndReturn(String body, int parentThreadId) {
+    public Post createPostAndReturn(String body, int parentThreadId, String imageUrl) {
         Thread parentThread = threadRepository.findById(parentThreadId)
                 .orElseThrow(() -> new RuntimeException("Thread not found"));
 
@@ -30,11 +30,12 @@ public class PostService {
         post.setBody(body);
         post.setParentThread(parentThread);
         post.setTimestamp(new Date());
+        post.setImageUrl(imageUrl);
         postRepository.save(post);
         return post;
     }
 
-    public Post createPostReplyAndReturn(String body, int parentPostId) {
+    public Post createPostReplyAndReturn(String body, int parentPostId, String imageUrl) {
         Post parentPost = postRepository.findById(parentPostId)
                 .orElseThrow(() -> new RuntimeException("Post not found"));
 
@@ -43,6 +44,7 @@ public class PostService {
         post.setParentThread(parentPost.getParentThread());
         post.setParentPost(parentPost);
         post.setTimestamp(new Date());
+        post.setImageUrl(imageUrl);
         postRepository.save(post);
         return post;
     }

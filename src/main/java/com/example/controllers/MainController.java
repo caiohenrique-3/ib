@@ -39,8 +39,9 @@ public class MainController {
 
     @PostMapping("/createThread")
     public String createThread(@RequestParam String title,
-                               @RequestParam String body) {
-        threadService.createThreadAndReturn(title, body);
+                               @RequestParam String body,
+                               @RequestParam(required = false) String imageUrl) {
+        threadService.createThreadAndReturn(title, body, imageUrl);
         return "redirect:/";
     }
 
@@ -58,15 +59,17 @@ public class MainController {
 
     @PostMapping("/replyTo/{threadId}")
     public String createReply(@PathVariable int threadId,
-                              @RequestParam(required = false) Integer id, @RequestParam String body) {
+                              @RequestParam(required = false) Integer id,
+                              @RequestParam String body,
+                              @RequestParam(required = false) String imageUrl) {
         if (id == null) {
             id = threadId;
         }
         Optional<Post> parentPost = postService.getPostById(id);
         if (parentPost.isPresent()) {
-            postService.createPostReplyAndReturn(body, id);
+            postService.createPostReplyAndReturn(body, id, imageUrl);
         } else {
-            postService.createPostAndReturn(body, id);
+            postService.createPostAndReturn(body, id, imageUrl);
         }
         return "redirect:/threads/" + threadId;
     }

@@ -46,7 +46,7 @@ public class ThreadServiceTests {
     @Test
     void testCreateThreadWithInitialPost() {
         Thread t = threadService
-                .createThreadAndReturn("hello", "this is a test!");
+                .createThreadAndReturn("hello", "this is a test!", null);
 
         assertTrue(threadService.getThreadById(
                 t.getId()).isPresent());
@@ -58,7 +58,7 @@ public class ThreadServiceTests {
     @Test
     void threadStartsEmpty() {
         Thread t = threadService
-                .createThreadAndReturn("hello", "this is a test!");
+                .createThreadAndReturn("hello", "this is a test!", null);
 
         List<Post> posts = postService
                 .getAllPostsInThreadById(t.getId());
@@ -69,7 +69,7 @@ public class ThreadServiceTests {
     @Test
     void deleteThreadById() {
         Thread t = threadService
-                .createThreadAndReturn("hello", "this is a test!");
+                .createThreadAndReturn("hello", "this is a test!", null);
 
         assertTrue(threadService.getThreadById(
                 t.getId()).isPresent());
@@ -86,14 +86,14 @@ public class ThreadServiceTests {
     @Test
     void deletingThreadDeletesRepliesToo() {
         Thread t = threadService
-                .createThreadAndReturn("hello", "this is a test!");
+                .createThreadAndReturn("hello", "this is a test!", null);
 
         assertTrue(threadService.getThreadById(
                 t.getId()).isPresent());
 
-        Post p1 = postService.createPostAndReturn("hi 1", t.getId());
-        Post p2 = postService.createPostAndReturn("hi 2", t.getId());
-        Post p3 = postService.createPostAndReturn("hi 3", t.getId());
+        Post p1 = postService.createPostAndReturn("hi 1", t.getId(), null);
+        Post p2 = postService.createPostAndReturn("hi 2", t.getId(), null);
+        Post p3 = postService.createPostAndReturn("hi 3", t.getId(), null);
 
         assertTrue(postService.getPostById(
                 p1.getId()).isPresent());
@@ -125,7 +125,7 @@ public class ThreadServiceTests {
     @Test
     void getThreadById() {
         Thread t = threadService
-                .createThreadAndReturn("hello", "this is a test!");
+                .createThreadAndReturn("hello", "this is a test!", null);
 
         assertTrue(threadService
                 .getThreadById(t.getId()).isPresent());
@@ -136,10 +136,10 @@ public class ThreadServiceTests {
 
     @Test
     void getAllThreads_isNotEmpty_ifTheresExistingThreads() {
-        threadService.createThreadAndReturn("hello", "this is a test!");
-        threadService.createThreadAndReturn("hello", "this is a test!");
-        threadService.createThreadAndReturn("hello", "this is a test!");
-        threadService.createThreadAndReturn("hello", "this is a test!");
+        threadService.createThreadAndReturn("hello", "this is a test!", null);
+        threadService.createThreadAndReturn("hello", "this is a test!", null);
+        threadService.createThreadAndReturn("hello", "this is a test!", null);
+        threadService.createThreadAndReturn("hello", "this is a test!", null);
 
         Pageable pageable = PageRequest.of(0, 20);
 
@@ -157,10 +157,10 @@ public class ThreadServiceTests {
 
     @Test
     void getTotalNumberOfThreads_1() {
-        threadService.createThreadAndReturn("test", "test");
-        threadService.createThreadAndReturn("test", "test");
-        threadService.createThreadAndReturn("test", "test");
-        threadService.createThreadAndReturn("test", "test");
+        threadService.createThreadAndReturn("test", "test", null);
+        threadService.createThreadAndReturn("test", "test", null);
+        threadService.createThreadAndReturn("test", "test", null);
+        threadService.createThreadAndReturn("test", "test", null);
         assertEquals(4L, threadService.getTotalNumberOfThreads());
     }
 
@@ -173,7 +173,7 @@ public class ThreadServiceTests {
     @Disabled
     // Broken test
     void getTimeSinceLastThread_1() throws Exception {
-        Thread t = threadService.createThreadAndReturn("Test", "test");
+        Thread t = threadService.createThreadAndReturn("Test", "test", null);
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss");
 

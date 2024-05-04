@@ -104,3 +104,16 @@ form :-ms-input-placeholder {
     border-color: #f8f8f2;
     background-color: #282a2b;
 }
+
+#image-url-input {
+    background-color: #282a2b;
+    color: #f8f8f2;
+    border: 0.06rem solid #f8f8f2;
+    padding: 0.5rem;
+    margin-block: 0.5rem;
+}
+
+img {
+    max-inline-size: 20rem;
+    height: auto;
+}
