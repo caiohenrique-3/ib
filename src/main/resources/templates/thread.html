@@ -30,7 +30,9 @@
 
         <button type="button"
                 th:data-post-id="${post.id}"
-                onclick="populateReplyForm(this.getAttribute('data-post-id'))">Reply
+                onclick="populateReplyForm(this.getAttribute('data-post-id'))"
+                id="post-reply-button"
+                title="Reply">↩
         </button>
     </div>
 
