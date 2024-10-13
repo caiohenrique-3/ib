@@ -12,7 +12,7 @@
     <a href="/stats" id="site-stats-button">Site Statistics</a>
 
     <h2>Make a new discussion</h2>
-    <form method="post" action="/createThread">
+    <form method="post" th:action="@{/createThread}">
         <input
                 type="text"
                 name="title"
@@ -33,6 +33,8 @@
         ><br/>
 
         <input type="text" name="imageUrl" placeholder="Image URL"/><br/>
+
+        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
     </form>
 </header>
 
