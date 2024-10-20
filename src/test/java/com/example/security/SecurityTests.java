@@ -1,9 +1,6 @@
 package com.example.security;
 
 import com.example.model.Thread;
-import com.example.repositories.PostRepository;
-import com.example.repositories.ThreadRepository;
-import com.example.services.PostService;
 import com.example.services.ThreadService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,34 +21,22 @@ public class SecurityTests {
     @Autowired
     ThreadService threadService;
 
-    @Autowired
-    PostService postService;
-
-    @Autowired
-    ThreadRepository threadRepository;
-
-    @Autowired
-    PostRepository postRepository;
-
     @Test
-    void testCreateThread_withoutCsrf() throws Exception {
+    void testCreateThread_Csrf() throws Exception {
+        // without csrf
         mockMvc.perform(MockMvcRequestBuilders.post("/createThread")
                         .param("title", "Test Title")
                         .param("body", "Test Body"))
                 .andExpect(MockMvcResultMatchers.status().is4xxClientError());
-    }
 
-    @Test
-    void testCreateThread_withCsrf() throws Exception {
+        // with valid csrf
         mockMvc.perform(MockMvcRequestBuilders.post("/createThread")
                         .param("title", "Test Title")
                         .param("body", "Test Body")
                         .with(csrf()))
                 .andExpect(MockMvcResultMatchers.status().is3xxRedirection());
-    }
 
-    @Test
-    void testCreateThread_withInvalidCsrf() throws Exception {
+        // with invalid csrf
         mockMvc.perform(MockMvcRequestBuilders.post("/createThread")
                         .param("title", "Test Title")
                         .param("body", "Test Body")
@@ -60,21 +45,24 @@ public class SecurityTests {
     }
 
     @Test
-    void testCreateReply_withoutCsrf() throws Exception {
+    void testCreateReply_Csrf() throws Exception {
         Thread t = threadService
                 .createThreadAndReturn("test", "test", null);
 
+        // without csrf
         mockMvc.perform(MockMvcRequestBuilders.post("/replyTo/" + t.getId())
                         .param("id", String.valueOf(t.getId()))
                         .param("body", "Test Body"))
                 .andExpect(MockMvcResultMatchers.status().is4xxClientError());
-    }
 
-    @Test
-    void testCreateReply_withInvalidCsrf() throws Exception {
-        Thread t = threadService
-                .createThreadAndReturn("test", "test", null);
+        // with valid csrf
+        mockMvc.perform(MockMvcRequestBuilders.post("/replyTo/" + t.getId())
+                        .param("id", String.valueOf(t.getId()))
+                        .param("body", "Test Body")
+                        .with(csrf()))
+                .andExpect(MockMvcResultMatchers.status().is3xxRedirection());
 
+        // with invalid csrf
         mockMvc.perform(MockMvcRequestBuilders.post("/replyTo/" + t.getId())
                         .param("id", String.valueOf(t.getId()))
                         .param("body", "Test Body")
@@ -83,93 +71,90 @@ public class SecurityTests {
     }
 
     @Test
-    void testLogin_withoutCsrf() throws Exception {
+    void testLogin_Csrf() throws Exception {
+        // without csrf
         mockMvc.perform(MockMvcRequestBuilders.post("/login/")
-                        .param("username", "john doe")
-                        .param("password", "TESTPASS"))
+                        .param("username", "user")
+                        .param("password", "password"))
                 .andExpect(MockMvcResultMatchers.status().is4xxClientError());
-    }
 
-    @Test
-    void testLogin_withCsrf() throws Exception {
+        // with valid csrf
         mockMvc.perform(MockMvcRequestBuilders.post("/login/")
                         .param("username", "user")
                         .param("password", "password")
                         .with(csrf()))
                 .andExpect(MockMvcResultMatchers.status().isOk());
-    }
 
-    @Test
-    void testLogin_withInvalidCsrf() throws Exception {
+        // with invalid csrf
         mockMvc.perform(MockMvcRequestBuilders.post("/login/")
-                        .param("username", "john doe")
-                        .param("password", "TESTPASS")
+                        .param("username", "user")
+                        .param("password", "password")
                         .with(csrf().useInvalidToken()))
                 .andExpect(MockMvcResultMatchers.status().is4xxClientError());
     }
 
     @Test
-    void adminUser_onAdminPage_withoutCsrf() throws Exception {
+    void adminPage_Csrf() throws Exception {
+        // without role, without csrf
         mockMvc.perform(MockMvcRequestBuilders
                         .get("/admin/"))
                 .andExpect(MockMvcResultMatchers.status().is4xxClientError());
-    }
 
-    @Test
-    void adminUser_onAdminPage_withInvalidCsrf() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders
                         .get("/admin/")
-                        .with(csrf().useInvalidToken())
-                        .with(user("admin")))
+                        .with(user("username")
+                                .roles("user")))
                 .andExpect(MockMvcResultMatchers.status().is4xxClientError());
-    }
 
-    @Test
-    void adminUser_onAdminPage() throws Exception {
+        // with role, without csrf
+        mockMvc.perform(MockMvcRequestBuilders
+                        .get("/admin/")
+                        .with(user("admin")
+                                .roles("admin")))
+                .andExpect(MockMvcResultMatchers
+                        .status().isOk())
+                .andExpect(MockMvcResultMatchers.view()
+                        .name("error"));
+
+        // with role, with csrf
         mockMvc.perform(MockMvcRequestBuilders
                         .get("/admin/")
                         .with(csrf())
                         .with(user("admin")
-                                .password("password")
                                 .roles("admin")))
                 .andExpect(MockMvcResultMatchers.status().isOk());
-    }
 
-    @Test
-    void normalUser_onAdminPage() throws Exception {
+        // with role, with invalid csrf
         mockMvc.perform(MockMvcRequestBuilders
                         .get("/admin/")
-                        .with(csrf())
-                        .with(user("user")
-                                .password("password")
-                                .roles("user")))
-                .andExpect(MockMvcResultMatchers.status().is4xxClientError());
-    }
+                        .with(csrf().useInvalidToken())
+                        .with(user("admin")
+                                .roles("admin")))
+                .andExpect(MockMvcResultMatchers
+                        .status().isOk())
+                .andExpect(MockMvcResultMatchers
+                        .view().name("error"));
 
-    @Test
-    void unauthenticatedUser_onAdminPage() throws Exception {
+        // Anon
         mockMvc.perform(MockMvcRequestBuilders
                         .get("/admin/")
                         .with(csrf())
                         .with(anonymous()))
-                .andExpect(MockMvcResultMatchers.status().is4xxClientError());
-    }
+                .andExpect(MockMvcResultMatchers
+                        .status().is4xxClientError());
 
-    @Test
-    void unauthenticatedUser_onAdminPage_withInvalidCsrf() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders
                         .get("/admin/")
                         .with(csrf().useInvalidToken())
                         .with(anonymous()))
-                .andExpect(MockMvcResultMatchers.status().is4xxClientError());
-    }
+                .andExpect(MockMvcResultMatchers
+                        .status().is4xxClientError());
 
-    @Test
-    void unauthenticatedUser_onAdminPage_withCsrf() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders
                         .get("/admin/")
                         .with(csrf())
                         .with(anonymous()))
-                .andExpect(MockMvcResultMatchers.status().is4xxClientError());
+                .andExpect(MockMvcResultMatchers
+                        .status().is4xxClientError());
     }
 }
