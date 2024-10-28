@@ -12,7 +12,24 @@
 
 <main>
     <div>
-        <p th:text="${thread.getFormattedInfo}"></p>
+        <span th:text="${thread.getFormattedInfo}"></span>
+        <span th:if="${thread.isLocked}">🔒</span>
+
+        <div sec:authorize="hasRole('ROLE_admin')" class="button-container">
+            <form th:action="@{/threads/{id}(id=${thread.id})}" th:method="delete">
+                <input type="hidden" name="_method" value="delete">
+                <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+                <button id="delete-thread-button">Delete</button>
+            </form>
+
+            <form th:action="${thread.isLocked} ?
+    @{/unlockThread/{id}(id=${thread.id})}
+    : @{/lockThread/{id}(id=${thread.id})}" method="post">
+                <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+                <button th:text="${thread.isLocked} ? 'Unlock' : 'Lock'" id="lock-thread-button"></button>
+            </form>
+        </div>
+
         <img th:if="${thread.imageUrl != null && !thread.imageUrl.isEmpty()}" th:src="${thread.imageUrl}" alt="Image"/>
         <h3 th:text="${thread.title}"></h3>
         <p th:text="${thread.initialPostBody}"></p>
@@ -20,6 +37,14 @@
 
     <div th:each="post: ${thread.posts}" th:id="'post-' + ${post.id}" th:data-post-id="${post.id}">
         <p th:text="${post.getFormattedInfo}"></p>
+
+        <div sec:authorize="hasRole('ROLE_admin')" class="button-container">
+            <form th:action="@{/posts/{id}(id=${post.id})}" th:method="delete">
+                <input type="hidden" name="_method" value="delete">
+                <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+                <button id="delete-post-button">Delete</button>
+            </form>
+        </div>
 
         <img th:if="${post.imageUrl != null && !post.imageUrl.isEmpty()}" th:src="${post.imageUrl}" alt="Image"/>
 
@@ -30,13 +55,15 @@
 
         <button type="button"
                 th:data-post-id="${post.id}"
+                th:if="${!thread.isLocked || #authorization.expression('hasRole(''admin'')')}"
                 onclick="populateReplyForm(this.getAttribute('data-post-id'))"
                 id="post-reply-button"
                 title="Reply">↩
         </button>
     </div>
 
-    <form id="replyForm" method="post" th:action="@{/replyTo/{id}(id=${thread.id})}">
+    <form id="replyForm" method="post" th:action="@{/replyTo/{id}(id=${thread.id})}"
+          th:if="${!thread.isLocked || #authorization.expression('hasRole(''admin'')')}">
         <div id="replyingTo" style="display: none;">
             <span id="replyingToText"></span>
             <button type="button" onclick="clearReplyingTo()">Clear</button>

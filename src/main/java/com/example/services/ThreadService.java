@@ -73,4 +73,18 @@ public class ThreadService {
         return days + " days, " + hours + " hours, " + minutes + " minutes, " +
                 seconds + " seconds - thread " + latestThread.getId();
     }
+
+    // TODO: Tests for these two new methods below
+    // TODO: Combine these functions somehow
+    public void lockThreadById(int threadId) {
+        Optional<Thread> t = threadRepository.findById(threadId);
+        t.get().setLocked(true);
+        threadRepository.save(t.get());
+    }
+
+    public void unlockThreadById(int threadId) {
+        Optional<Thread> t = threadRepository.findById(threadId);
+        t.get().setLocked(false);
+        threadRepository.save(t.get());
+    }
 }

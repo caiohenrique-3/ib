@@ -65,7 +65,7 @@ header :-ms-input-placeholder {
   text-underline-offset: 0.2rem;
 }
 
-@media(max-width: 26.25rem){
+@media(max-width: 26.25rem) {
     header h2 {
         padding-block-start: 2rem;
     }
@@ -106,4 +106,37 @@ main p {
 img {
     max-inline-size: 12.5rem;
     block-size: auto;
+}
+
+.thread-info {
+    border: none;
+    display: inline;
+}
+
+.button-container {
+    border: none;
+    padding: 0;
+    margin-block-start: 0.2rem;
+}
+
+.button-container form {
+    display: inline;
+    margin: 0;
+}
+
+#delete-thread-button, #lock-thread-button {
+    background: #181a1b;;
+    color: white;
+    border: none;
+    padding: 0.15rem;
+    cursor: pointer;
+    border-radius: 0.15rem;
+}
+
+#delete-thread-button:hover {
+    color: red;
+}
+
+#lock-thread-button:hover {
+    color: yellow;
 }

@@ -4,6 +4,7 @@ import com.example.model.Post;
 import com.example.model.Thread;
 import com.example.services.PostService;
 import com.example.services.ThreadService;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -54,6 +55,33 @@ public class MainController {
         throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Thread Not Found");
     }
 
+    // TODO: Single endpoint for lock/unlock
+    // TODO: Tests
+    @PostMapping("/lockThread/{id}")
+    public String lockThread(@PathVariable int id, Model model) {
+        threadService.lockThreadById(id);
+
+        return "redirect:/threads/" + id;
+    }
+
+    @PostMapping("/unlockThread/{id}")
+    public String unlockThread(@PathVariable int id, Model model) {
+        threadService.unlockThreadById(id);
+
+        return "redirect:/threads/" + id;
+    }
+
+    @DeleteMapping("/threads/{id}")
+    @ResponseBody
+    public String deleteThread(@PathVariable int id, Model model) {
+        threadService.deleteThreadById(id);
+
+        if (threadService.getThreadById(id).isPresent())
+            return "Error while deleting thread " + id + ".";
+
+        return "Succesfully deleted thread " + id + ".";
+    }
+
     @GetMapping("/posts/{id}")
     public String showPost(@PathVariable int id, Model model) {
         Optional<Post> p = postService.getPostById(id);
@@ -70,7 +98,14 @@ public class MainController {
     public String createReply(@PathVariable int threadId,
                               @RequestParam(required = false) Integer id,
                               @RequestParam String body,
-                              @RequestParam(required = false) String imageUrl) {
+                              @RequestParam(required = false) String imageUrl,
+                              HttpServletRequest request) {
+        if (threadService.getThreadById(threadId).get().isLocked()
+                && !request.isUserInRole("admin")) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED,
+                    "You don't have the right O you don't have the right");
+        }
+
         if (id == null) {
             id = threadId;
         }
@@ -81,6 +116,19 @@ public class MainController {
             postService.createPostAndReturn(body, id, imageUrl);
         }
         return "redirect:/threads/" + threadId;
+    }
+
+    // Can't delete posts that are in the parentPostId of other posts for now
+    // TODO: Fix this
+    @DeleteMapping("/posts/{id}")
+    @ResponseBody
+    public String deletePosts(@PathVariable int id, Model model) {
+        postService.deletePostById(id);
+
+        if (postService.getPostById(id).isPresent())
+            return "Error while deleting post " + id + ".";
+
+        return "Succesfully deleted post " + id + ".";
     }
 
     @GetMapping("/stats")
