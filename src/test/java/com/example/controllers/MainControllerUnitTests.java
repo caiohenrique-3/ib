@@ -4,6 +4,7 @@ import com.example.model.Post;
 import com.example.model.Thread;
 import com.example.services.PostService;
 import com.example.services.ThreadService;
+import jakarta.servlet.http.HttpServletRequest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -13,6 +14,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.ui.Model;
 
 import java.util.ArrayList;
@@ -99,12 +101,19 @@ public class MainControllerUnitTests {
 
     @Test
     void createReply() {
+        Optional<Thread> t = Optional.of(mock(Thread.class));
         Post p = mock(Post.class);
+
+        doReturn(t).when(threadService)
+                .getThreadById(anyInt());
+
         doReturn(p).when(postService)
                 .createPostAndReturn(anyString(), anyInt(), anyString());
 
+        MockHttpServletRequest request = new MockHttpServletRequest();
+
         String returnValue = mainController
-                .createReply(0, 0, "test", null);
+                .createReply(0, 0, "test", null, request);
 
         assertEquals("redirect:/threads/0", returnValue);
     }
