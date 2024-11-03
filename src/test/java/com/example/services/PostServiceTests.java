@@ -92,6 +92,29 @@ public class PostServiceTests {
     }
 
     @Test
+    void canDeletePostWithChildren() {
+        Thread t = threadService
+                .createThreadAndReturn("hello", "hello guys", null);
+
+        Post parentPost = postService
+                .createPostAndReturn("test", t.getId(), null);
+
+        Post childPost = postService
+                .createPostAndReturn("test", t.getId(), null);
+
+        childPost.setParentPost(parentPost);
+
+        postService
+                .deletePostById(parentPost.getId());
+
+        assertFalse(postService.getPostById(
+                parentPost.getId()).isPresent());
+
+        assertTrue(postService.getPostById(
+                childPost.getId()).isPresent());
+    }
+
+    @Test
     void getPostById() {
         Thread t = threadService
                 .createThreadAndReturn("hello", "hello test", null);

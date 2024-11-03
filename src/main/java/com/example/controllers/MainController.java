@@ -55,8 +55,6 @@ public class MainController {
         throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Thread Not Found");
     }
 
-    // TODO: Single endpoint for lock/unlock
-    // TODO: Tests
     @PostMapping("/lockThread/{id}")
     public String lockThread(@PathVariable int id, Model model) {
         threadService.lockThreadById(id);
@@ -118,8 +116,6 @@ public class MainController {
         return "redirect:/threads/" + threadId;
     }
 
-    // Can't delete posts that are in the parentPostId of other posts for now
-    // TODO: Fix this
     @DeleteMapping("/posts/{id}")
     @ResponseBody
     public String deletePosts(@PathVariable int id, Model model) {

@@ -38,7 +38,7 @@ public class ThreadServiceUnitTests {
     void createThreadWithInitialPost() {
         threadService
                 .createThreadAndReturn("i can take this anymore",
-                "my tests all faill!!!!", null);
+                        "my tests all faill!!!!", null);
 
         verify(threadRepository, times(1))
                 .save(any(Thread.class));

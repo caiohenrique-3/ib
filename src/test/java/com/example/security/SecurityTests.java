@@ -1,12 +1,17 @@
 package com.example.security;
 
+import com.example.model.Post;
 import com.example.model.Thread;
+import com.example.repositories.PostRepository;
+import com.example.services.PostService;
 import com.example.services.ThreadService;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
@@ -20,6 +25,12 @@ public class SecurityTests {
 
     @Autowired
     ThreadService threadService;
+
+    @Autowired
+    PostService postService;
+
+    @Autowired
+    PostRepository postRepository;
 
     @Test
     void testCreateThread_Csrf() throws Exception {
@@ -156,5 +167,195 @@ public class SecurityTests {
                         .with(anonymous()))
                 .andExpect(MockMvcResultMatchers
                         .status().is4xxClientError());
+    }
+
+    @Test
+    void testLockThread_Csrf() throws Exception {
+        Thread t = threadService
+                .createThreadAndReturn("test", "test", null);
+
+        // without csrf, without role
+        mockMvc.perform(MockMvcRequestBuilders.post("/lockThread/" + t.getId())
+                        .param("id", String.valueOf(t.getId())))
+                .andExpect(MockMvcResultMatchers.status().is4xxClientError());
+
+        // with valid csrf, without role
+        mockMvc.perform(MockMvcRequestBuilders.post("/lockThread/" + t.getId())
+                        .param("id", String.valueOf(t.getId()))
+                        .with(csrf()))
+                .andExpect(MockMvcResultMatchers.status().isUnauthorized());
+
+        // with valid csrf, with role
+        mockMvc.perform(MockMvcRequestBuilders.post("/lockThread/" + t.getId())
+                        .param("id", String.valueOf(t.getId()))
+                        .with(csrf())
+                        .with(user("admin")
+                                .roles("admin")))
+                .andExpect(MockMvcResultMatchers.status().is3xxRedirection());
+
+        // with invalid csrf, with role
+        mockMvc.perform(MockMvcRequestBuilders.post("/lockThread/" + t.getId())
+                        .param("id", String.valueOf(t.getId()))
+                        .with(csrf()
+                                .useInvalidToken())
+                        .with(user("user")
+                                .roles("admin")))
+                .andExpect(MockMvcResultMatchers.status().is4xxClientError());
+
+        // with invalid csrf, without role
+        mockMvc.perform(MockMvcRequestBuilders.post("/lockThread/" + t.getId())
+                        .param("id", String.valueOf(t.getId()))
+                        .with(csrf().useInvalidToken()))
+                .andExpect(MockMvcResultMatchers.status().is4xxClientError());
+    }
+
+    @Test
+    void testUnlockThread_Csrf() throws Exception {
+        Thread t = threadService
+                .createThreadAndReturn("test", "test", null);
+
+        threadService.lockThreadById(t.getId());
+
+        // without csrf, without role
+        mockMvc.perform(MockMvcRequestBuilders.post("/unlockThread/" + t.getId())
+                        .param("id", String.valueOf(t.getId())))
+                .andExpect(MockMvcResultMatchers.status().is4xxClientError());
+
+        // with valid csrf, without role
+        mockMvc.perform(MockMvcRequestBuilders.post("/unlockThread/" + t.getId())
+                        .param("id", String.valueOf(t.getId()))
+                        .with(csrf()))
+                .andExpect(MockMvcResultMatchers.status().isUnauthorized());
+
+        // with valid csrf, with role
+        mockMvc.perform(MockMvcRequestBuilders.post("/unlockThread/" + t.getId())
+                        .param("id", String.valueOf(t.getId()))
+                        .with(csrf())
+                        .with(user("admin")
+                                .roles("admin")))
+                .andExpect(MockMvcResultMatchers.status().is3xxRedirection());
+
+        // with invalid csrf, with role
+        mockMvc.perform(MockMvcRequestBuilders.post("/unlockThread/" + t.getId())
+                        .param("id", String.valueOf(t.getId()))
+                        .with(csrf()
+                                .useInvalidToken())
+                        .with(user("user")
+                                .roles("admin")))
+                .andExpect(MockMvcResultMatchers.status().is4xxClientError());
+
+        // with invalid csrf, without role
+        mockMvc.perform(MockMvcRequestBuilders.post("/unlockThread/" + t.getId())
+                        .param("id", String.valueOf(t.getId()))
+                        .with(csrf().useInvalidToken()))
+                .andExpect(MockMvcResultMatchers.status().is4xxClientError());
+    }
+
+    @Test
+    void testDeleteThread_csrf() throws Exception {
+        Thread t = threadService
+                .createThreadAndReturn("test", "test", null);
+
+        String successMessage = "Succesfully deleted thread " + t.getId() + ".";
+
+        // without csrf, without role
+        mockMvc.perform(MockMvcRequestBuilders
+                        .delete("/threads/" + t.getId())
+                        .param("id", String.valueOf(t.getId())))
+                .andExpect(MockMvcResultMatchers.status().isForbidden());
+
+        // with valid csrf, without role
+        mockMvc.perform(MockMvcRequestBuilders
+                        .delete("/threads/" + t.getId())
+                        .param("id", String.valueOf(t.getId()))
+                        .with(csrf()))
+                .andExpect(MockMvcResultMatchers.status().isUnauthorized());
+
+        // with valid csrf, with role
+        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders
+                        .delete("/threads/" + t.getId())
+                        .param("id", String.valueOf(t.getId()))
+                        .with(csrf())
+                        .with(user("user")
+                                .roles("admin")))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andReturn();
+
+        String response = mvcResult.getResponse().getContentAsString();
+
+        Assertions.assertEquals(successMessage, response);
+
+        // with invalid csrf, with role
+        mockMvc.perform(MockMvcRequestBuilders
+                        .delete("/threads/" + t.getId())
+                        .param("id", String.valueOf(t.getId()))
+                        .with(csrf()
+                                .useInvalidToken())
+                        .with(user("user")
+                                .roles("admin")))
+                .andExpect(MockMvcResultMatchers.status().isForbidden());
+
+        // with invalid csrf, without role
+        mockMvc.perform(MockMvcRequestBuilders
+                        .delete("/threads/" + t.getId())
+                        .param("id", String.valueOf(t.getId()))
+                        .with(csrf()
+                                .useInvalidToken()))
+                .andExpect(MockMvcResultMatchers.status().isForbidden());
+    }
+
+    @Test
+    void testDeletePost_csrf() throws Exception {
+        Thread t = threadService
+                .createThreadAndReturn("test", "test", null);
+        Post p = postService
+                .createPostAndReturn("test", t.getId(), null);
+
+        String successMessage = "Succesfully deleted post " + p.getId() + ".";
+
+        // without csrf, without role
+        mockMvc.perform(MockMvcRequestBuilders
+                        .delete("/posts/" + p.getId())
+                        .param("id", String.valueOf(p.getId())))
+                .andExpect(MockMvcResultMatchers.status().isForbidden());
+
+        // with valid csrf, without role
+        mockMvc.perform(MockMvcRequestBuilders
+                        .delete("/posts/" + p.getId())
+                        .param("id", String.valueOf(p.getId()))
+                        .with(csrf()))
+                .andExpect(MockMvcResultMatchers.status().isUnauthorized());
+
+        // with valid csrf, with role
+        MvcResult firstMvcResult = mockMvc.perform(MockMvcRequestBuilders
+                        .delete("/posts/" + p.getId())
+                        .param("id", String.valueOf(p.getId()))
+                        .with(csrf())
+                        .with(user("user")
+                                .roles("admin")))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andReturn();
+
+        String response = firstMvcResult.getResponse().getContentAsString();
+
+        Assertions.assertEquals(successMessage, response);
+
+        // with invalid csrf, with role
+        mockMvc.perform(MockMvcRequestBuilders
+                        .delete("/posts/" + p.getId())
+                        .param("id", String.valueOf(p.getId()))
+                        .with(csrf()
+                                .useInvalidToken())
+                        .with(user("user")
+                                .roles("admin")))
+                .andExpect(MockMvcResultMatchers.status().isForbidden());
+
+        // with invalid csrf, without role
+        mockMvc.perform(MockMvcRequestBuilders
+                        .delete("/posts/" + p.getId())
+                        .param("id", String.valueOf(p.getId()))
+                        .with(csrf()
+                                .useInvalidToken()))
+                .andExpect(MockMvcResultMatchers.status().isForbidden());
     }
 }

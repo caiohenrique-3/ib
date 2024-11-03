@@ -7,21 +7,20 @@ import com.example.repositories.PostRepository;
 import com.example.repositories.ThreadRepository;
 import com.example.services.PostService;
 import com.example.services.ThreadService;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
-import org.springframework.security.web.csrf.DefaultCsrfToken;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.ResultMatcher;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.request.RequestPostProcessor;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
+import java.util.List;
+
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -112,6 +111,46 @@ public class MainControllerTests {
                         .param("body", "Test Body")
                         .with(csrf()))
                 .andExpect(MockMvcResultMatchers.view().name("error"));
+    }
+
+    @Test
+    void testCreateReply_throwsError_ifLocked() throws Exception {
+        Thread t = threadService
+                .createThreadAndReturn("test", "test", null);
+
+        threadService.lockThreadById(t.getId());
+
+        mockMvc.perform(MockMvcRequestBuilders
+                        .post("/replyTo/" + t.getId())
+                        .param("body", "Test Body")
+                        .with(csrf()))
+                .andExpect(MockMvcResultMatchers.status().isUnauthorized());
+    }
+
+    @Test
+    void testCreateReply_adminReplyToLockedThread() throws Exception {
+        Thread t = threadService
+                .createThreadAndReturn("test", "test", null);
+
+        threadService.lockThreadById(t.getId());
+
+        List<Post> postList = postService
+                .getAllPostsInThreadById(t.getId());
+
+        Assertions.assertTrue(postList.isEmpty());
+
+        mockMvc.perform(MockMvcRequestBuilders
+                        .post("/replyTo/" + t.getId())
+                        .param("body", "Test Body")
+                        .with(csrf())
+                        .with(user("user")
+                                .roles("admin")))
+                .andExpect(MockMvcResultMatchers.status().is3xxRedirection());
+
+        postList = postService
+                .getAllPostsInThreadById(t.getId());
+
+        Assertions.assertFalse(postList.isEmpty());
     }
 
     @Test

@@ -74,7 +74,6 @@ public class ThreadService {
                 seconds + " seconds - thread " + latestThread.getId();
     }
 
-    // TODO: Tests for these two new methods below
     // TODO: Combine these functions somehow
     public void lockThreadById(int threadId) {
         Optional<Thread> t = threadRepository.findById(threadId);
