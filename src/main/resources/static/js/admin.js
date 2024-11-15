@@ -61,27 +61,6 @@ function setActionAndSubmit(action) {
     }
 }
 
-//function setActionAndSubmit(action) {
-//    if (confirm("Are you sure you want to " + action + " these threads?")) {
-//        document.getElementById('actionField').value = action;
-//        document.getElementById('threadsForm').submit();
-//    }
-//}
-
-//function setActionAndSubmit(action) {
-//    if (confirm("Are you sure you want to " + action + " these threads?")) {
-//        document.getElementById('actionField').value = action;
-//        if (document.getElementById('threadsForm') != null) {
-//            document.getElementById('threadsForm').submit();
-//            }
-//        else {
-//            if (document.getElementById('postsForm') != null) {
-//                document.getElementById('postsForm').submit();
-//            }
-//        }
-//    }
-//}
-
 function toggleCheckboxes(source) {
     checkboxes = document.getElementsByName('itemIds');
     for (var i = 0, n = checkboxes.length; i < n; i++) {

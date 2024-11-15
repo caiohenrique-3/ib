@@ -34,40 +34,6 @@
         ? (#lists.isEmpty(posts) ? 'Nothing found' : 'Search results: ' + posts.size() + ' posts')
         : 'Search results: ' + threads.size() + ' threads'}"></h1>
 
-<!--    <form id="threadsForm" method="post" th:action="@{/threads/multiAction}"-->
-<!--          th:if="${!#lists.isEmpty(threads) or !#lists.isEmpty(posts)}">-->
-
-<!--        <input type="checkbox" onclick="toggleCheckboxes(this);"/> Select All<br/>-->
-<!--        <ul th:if="${!#lists.isEmpty(threads)}" id="threadsFound">-->
-<!--            <li th:each="thread : ${threads}">-->
-<!--                <input type="checkbox" name="threadIds" th:value="${thread.getId}"/>-->
-<!--                <span th:text="${thread.getFormattedInfo}"></span>-->
-<!--                <span th:if="${thread.isLocked}">🔒</span>-->
-<!--                <a th:text="${thread.title}" th:href="@{/threads/{id}(id=${thread.getId})}"></a>-->
-<!--            </li>-->
-<!--        </ul>-->
-
-<!--        <ul th:if="${!#lists.isEmpty(posts)}" id="postsFound">-->
-<!--            <li th:each="post : ${posts}">-->
-<!--                <input type="checkbox" name="itemIds" th:value="${post.getId}"/>-->
-<!--                <span th:text="${post.getFormattedInfo}"></span>-->
-<!--                <a th:text="${post.body}" th:href="@{/posts/{id}(id=${post.getId})}"></a>-->
-<!--            </li>-->
-<!--        </ul>-->
-
-<!--        <input type="hidden" name="action" id="actionField"/>-->
-
-<!--        <button type="button" onclick="setActionAndSubmit('delete')">Delete Selected</button>-->
-
-<!--        <button th:if="${resultsType.equals('thread')}"-->
-<!--                type="button" onclick="setActionAndSubmit('lock')">Lock Selected</button>-->
-<!--        <button th:if="${resultsType.equals('thread')}"-->
-<!--                type="button" onclick="setActionAndSubmit('unlock')">Unlock Selected</button>-->
-
-<!--        <input type="hidden" name="itemType" th:value="${resultsType}"/>-->
-<!--        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>-->
-<!--    </form>-->
-
     <form th:id="${resultsType.equals('post') ? 'postsForm' : 'threadsForm'}"
           th:action="@{${resultsType.equals('post') ? '/posts/multiAction' : '/threads/multiAction'}}"
           method="post"

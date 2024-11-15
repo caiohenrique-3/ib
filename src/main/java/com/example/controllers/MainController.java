@@ -220,38 +220,4 @@ public class MainController {
         }
         return "redirect:/admin";
     }
-
-/*
-    Doesn't work, returns null on every request
-    @PostMapping("/admin/multiAction")
-    public String adminMultiAction(@RequestParam ArrayList<Integer> itemIds,
-                                   @RequestParam String itemType,
-                                   @RequestParam String action) {
-
-        System.out.println("Request received on /admin/multiAction");
-        System.out.println(itemIds);
-        System.out.println(itemType);
-        System.out.println(action);
-
-        if ("delete".equals(action)) {
-            for (Integer id : itemIds) {
-                if ("thread".equals(itemType)) {
-                    threadService.deleteThreadById(id);
-                } else if ("post".equals(itemType)) {
-                    postService.deletePostById(id);
-                }
-            }
-        } else if ("lock".equals(action) && "thread".equals(itemType)) {
-            for (Integer id : itemIds) {
-                threadService.lockThreadById(id);
-            }
-        } else if ("unlock".equals(action) && "thread".equals(itemType)) {
-            for (Integer id : itemIds) {
-                threadService.unlockThreadById(id);
-            }
-        }
-
-        return "redirect:/admin";
-    }
-*/
 }
