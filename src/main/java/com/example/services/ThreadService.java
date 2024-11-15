@@ -1,6 +1,5 @@
 package com.example.services;
 
-import com.example.model.Post;
 import com.example.model.Thread;
 import com.example.repositories.ThreadRepository;
 import org.springframework.data.domain.Page;
@@ -85,5 +84,11 @@ public class ThreadService {
         Optional<Thread> t = threadRepository.findById(threadId);
         t.get().setLocked(false);
         threadRepository.save(t.get());
+    }
+
+    public ArrayList<Thread> findThreadByTitleAndBody(String title, String body) {
+        List<Thread> threads = threadRepository
+                .findByTitleAndBody(title, body);
+        return new ArrayList<>(threads);
     }
 }

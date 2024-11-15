@@ -13,7 +13,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.ArrayList;
 import java.util.Optional;
 
 @Controller
@@ -77,7 +79,7 @@ public class MainController {
         if (threadService.getThreadById(id).isPresent())
             return "Error while deleting thread " + id + ".";
 
-        return "Succesfully deleted thread " + id + ".";
+        return "Successfully deleted thread " + id + ".";
     }
 
     @GetMapping("/posts/{id}")
@@ -142,8 +144,114 @@ public class MainController {
     }
 
     @GetMapping("/admin")
-    @ResponseBody
     public String showAdminPage(Model model) {
-        return "Hello Admin!";
+        return "admin";
     }
+
+    @PostMapping("/search")
+    public String searchThread(@RequestParam("title") String title,
+                               @RequestParam("body") String body,
+                               @RequestParam("type") String type,
+                               Model model) {
+        if (title.isBlank() && body.isBlank())
+            return "admin";
+
+        if (type.equals("thread")) {
+            ArrayList<Thread> threads = threadService
+                    .findThreadByTitleAndBody(title, body);
+            model.addAttribute("posts", new ArrayList<>());
+            model.addAttribute("threads", threads);
+            model.addAttribute("resultsType", type);
+            return "admin";
+        } else if (type.equals("post")) {
+            ArrayList<Post> posts = postService
+                    .findPostByBody(body);
+            model.addAttribute("posts", posts);
+            model.addAttribute("threads", new ArrayList<>());
+            model.addAttribute("resultsType", type);
+            return "admin";
+        } else if (type.equals("id")) {
+            // TODO: zis
+            return "admin";
+        } else {
+            return "Bad search type";
+        }
+    }
+
+    @PostMapping("/threads/multiAction")
+    public String threadsMultiAction(@RequestParam ArrayList<Integer> itemIds,
+                                     @RequestParam String action,
+                                     RedirectAttributes redirectAttributes) {
+        try {
+            if ("delete".equals(action)) {
+                for (Integer id : itemIds) {
+                    threadService.deleteThreadById(id);
+                }
+            } else if ("lock".equals(action)) {
+                for (Integer id : itemIds) {
+                    threadService.lockThreadById(id);
+                }
+            } else if ("unlock".equals(action)) {
+                for (Integer id : itemIds) {
+                    threadService.unlockThreadById(id);
+                }
+            }
+            redirectAttributes.addFlashAttribute("message", "Action completed successfully.");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("error", "An error occurred while performing the action.");
+        }
+        return "redirect:/admin";
+    }
+
+    @PostMapping("/posts/multiAction")
+    public String postsMultiAction(@RequestParam ArrayList<Integer> itemIds,
+                                   @RequestParam String action,
+                                   RedirectAttributes redirectAttributes) {
+        try {
+            if ("delete".equals(action)) {
+                for (Integer id : itemIds) {
+                    postService.deletePostById(id);
+                }
+            }
+
+            redirectAttributes.addFlashAttribute("message", "Action completed successfully.");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("error", "An error occurred while performing the action.");
+        }
+        return "redirect:/admin";
+    }
+
+/*
+    Doesn't work, returns null on every request
+    @PostMapping("/admin/multiAction")
+    public String adminMultiAction(@RequestParam ArrayList<Integer> itemIds,
+                                   @RequestParam String itemType,
+                                   @RequestParam String action) {
+
+        System.out.println("Request received on /admin/multiAction");
+        System.out.println(itemIds);
+        System.out.println(itemType);
+        System.out.println(action);
+
+        if ("delete".equals(action)) {
+            for (Integer id : itemIds) {
+                if ("thread".equals(itemType)) {
+                    threadService.deleteThreadById(id);
+                } else if ("post".equals(itemType)) {
+                    postService.deletePostById(id);
+                }
+            }
+        } else if ("lock".equals(action) && "thread".equals(itemType)) {
+            for (Integer id : itemIds) {
+                threadService.lockThreadById(id);
+            }
+        } else if ("unlock".equals(action) && "thread".equals(itemType)) {
+            for (Integer id : itemIds) {
+                threadService.unlockThreadById(id);
+            }
+        }
+
+        return "redirect:/admin";
+    }
+*/
 }

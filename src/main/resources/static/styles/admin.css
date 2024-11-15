@@ -1,0 +1,13 @@
+html {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  font-weight: normal;
+}
+
+body {
+  background-color: #181a1b;
+  color: #a9acb1;
+  font-family: Arial, sans-serif;
+  font-size: 0.8rem;
+}

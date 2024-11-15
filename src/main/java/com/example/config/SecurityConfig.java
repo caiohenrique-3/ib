@@ -32,6 +32,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/unlockThread/**").hasRole("admin")
                         .requestMatchers(HttpMethod.DELETE, "/threads/**").hasRole("admin")
                         .requestMatchers(HttpMethod.DELETE, "/posts/**").hasRole("admin")
+                        .requestMatchers(HttpMethod.POST, "/search/**").hasRole("admin")
                         .anyRequest()
                         .permitAll())
                 .httpBasic(Customizer.withDefaults())
