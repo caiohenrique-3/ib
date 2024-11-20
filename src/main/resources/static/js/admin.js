@@ -1,16 +1,16 @@
 // Removing "required" tag if one of the inputs is not empty.
-document.addEventListener('DOMContentLoaded', function() {
-  const inputs = Array.from(
-    document.querySelectorAll('input[name=title], input[name=body]')
-  );
+document.addEventListener('DOMContentLoaded', function () {
+    const inputs = Array.from(
+        document.querySelectorAll('input[name=title], input[name=body]')
+    );
 
-  const inputListener = e => {
-    inputs
-      .filter(i => i !== e.target)
-      .forEach(i => (i.required = !e.target.value.length));
-  };
+    const inputListener = e => {
+        inputs
+            .filter(i => i !== e.target)
+            .forEach(i => (i.required = !e.target.value.length));
+    };
 
-  inputs.forEach(i => i.addEventListener('input', inputListener));
+    inputs.forEach(i => i.addEventListener('input', inputListener));
 });
 
 document.addEventListener('DOMContentLoaded', function () {
@@ -25,13 +25,11 @@ document.addEventListener('DOMContentLoaded', function () {
             titleField.style.display = 'none';
             idField.style.display = 'none';
             bodyField.style.display = 'block';
-        }
-        else if (typeSelect.value === 'id') {
+        } else if (typeSelect.value === 'id') {
             titleField.style.display = 'none';
             bodyField.style.display = 'none';
             idField.style.display = 'block';
-        }
-        else {
+        } else {
             titleField.style.display = 'block';
             bodyField.style.display = 'block';
             idField.style.display = 'none';

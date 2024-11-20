@@ -7,80 +7,82 @@
     <link href="/styles/admin.css" rel="stylesheet"/>
 </head>
 <body>
-    <div id="noscript-warning">
-        <noscript>This page requires JavaScript to function properly. Please enable it in your browser settings.</noscript>
-    </div>
+<div id="noscript-warning">
+    <noscript>This page requires JavaScript to function properly. Please enable it in your browser settings.</noscript>
+</div>
 
-    <h1>Search</h1>
+<h1>Search</h1>
 
-    <!--    TODO: New type "id": Search in Threads and Posts for specified id-->
-    <form th:action="@{/search}" method="post">
-        <input type="text" name="title" placeholder="Title" id="titleField" required>
-        <input type="text" name="body" placeholder="Body" id="bodyField" required>
-        <input type="number" name="id" placeholder="ID" id="idField">
+<!--    TODO: New type "id": Search in Threads and Posts for specified id-->
+<form th:action="@{/search}" method="post">
+    <input type="text" name="title" placeholder="Title" id="titleField" required>
+    <input type="text" name="body" placeholder="Body" id="bodyField" required>
+    <input type="number" name="id" placeholder="ID" id="idField">
 
-        <label for="type">Type:</label>
-        <select name="type" id="type">
-            <option value="thread" th:selected="${resultsType == 'thread'}">Thread</option>
-            <option value="post" th:selected="${resultsType == 'post'}">Post</option>
-            <option value="id" th:selected="${resultsType == 'id'}">ID</option>
-        </select>
+    <label for="type">Type:</label>
+    <select name="type" id="type">
+        <option value="thread" th:selected="${resultsType == 'thread'}">Thread</option>
+        <option value="post" th:selected="${resultsType == 'post'}">Post</option>
+        <option value="id" th:selected="${resultsType == 'id'}">ID</option>
+    </select>
 
-        <button type="submit">Search</button>
-        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-    </form>
+    <button type="submit">Search</button>
+    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+</form>
 
-    <h4 th:text="'results type: ' + ${resultsType}"></h4>
+<h4 th:text="'results type: ' + ${resultsType}"></h4>
 
-    <h1 th:if="${threads != null and posts != null}"
-        th:text="${#lists.isEmpty(threads)
+<h1 th:if="${threads != null and posts != null}"
+    th:text="${#lists.isEmpty(threads)
         ? (#lists.isEmpty(posts) ? 'Nothing found' : 'Search results: ' + posts.size() + ' posts')
         : 'Search results: ' + threads.size() + ' threads'}"></h1>
 
-    <form th:id="${resultsType.equals('post') ? 'postsForm' : 'threadsForm'}"
-          th:action="@{${resultsType.equals('post') ? '/posts/multiAction' : '/threads/multiAction'}}"
-          method="post"
-          th:if="${!#lists.isEmpty(threads) or !#lists.isEmpty(posts)}">
+<form th:id="${resultsType.equals('post') ? 'postsForm' : 'threadsForm'}"
+      th:action="@{${resultsType.equals('post') ? '/posts/multiAction' : '/threads/multiAction'}}"
+      method="post"
+      th:if="${!#lists.isEmpty(threads) or !#lists.isEmpty(posts)}">
 
-        <input type="checkbox" onclick="toggleCheckboxes(this);"/> Select All<br/>
-        <ul th:if="${!#lists.isEmpty(threads)}" id="threadsFound">
-            <li th:each="thread : ${threads}">
-                <input type="checkbox" name="itemIds" th:value="${thread.getId()}"/>
-                <span th:text="${thread.getFormattedInfo()}"></span>
-                <span th:if="${thread.isLocked()}">🔒</span>
-                <a th:text="${thread.title}" th:href="@{/threads/{id}(id=${thread.getId()})}"></a>
-            </li>
-        </ul>
+    <input type="checkbox" onclick="toggleCheckboxes(this);"/> Select All<br/>
+    <ul th:if="${!#lists.isEmpty(threads)}" id="threadsFound">
+        <li th:each="thread : ${threads}">
+            <input type="checkbox" name="itemIds" th:value="${thread.getId()}"/>
+            <span th:text="${thread.getFormattedInfo()}"></span>
+            <span th:if="${thread.isLocked()}">🔒</span>
+            <a th:text="${thread.title}" th:href="@{/threads/{id}(id=${thread.getId()})}"></a>
+        </li>
+    </ul>
 
-        <ul th:if="${!#lists.isEmpty(posts)}" id="postsFound">
-            <li th:each="post : ${posts}">
-                <input type="checkbox" name="itemIds" th:value="${post.getId()}"/>
-                <span th:text="${post.getFormattedInfo()}"></span>
-                <a th:text="${post.body}" th:href="@{/posts/{id}(id=${post.getId()})}"></a>
-            </li>
-        </ul>
+    <ul th:if="${!#lists.isEmpty(posts)}" id="postsFound">
+        <li th:each="post : ${posts}">
+            <input type="checkbox" name="itemIds" th:value="${post.getId()}"/>
+            <span th:text="${post.getFormattedInfo()}"></span>
+            <a th:text="${post.body}" th:href="@{/posts/{id}(id=${post.getId()})}"></a>
+        </li>
+    </ul>
 
-        <input type="hidden" name="action" id="actionField"/>
+    <input type="hidden" name="action" id="actionField"/>
 
-        <button type="button" onclick="setActionAndSubmit('delete')" class="delete">Delete Selected</button>
+    <button type="button" onclick="setActionAndSubmit('delete')" class="delete">Delete Selected</button>
 
-        <button th:if="${resultsType.equals('thread')}"
-                type="button" onclick="setActionAndSubmit('lock')" class="lock">Lock Selected</button>
-        <button th:if="${resultsType.equals('thread')}"
-                type="button" onclick="setActionAndSubmit('unlock')" class="unlock">Unlock Selected</button>
+    <button th:if="${resultsType.equals('thread')}"
+            type="button" onclick="setActionAndSubmit('lock')" class="lock">Lock Selected
+    </button>
+    <button th:if="${resultsType.equals('thread')}"
+            type="button" onclick="setActionAndSubmit('unlock')" class="unlock">Unlock Selected
+    </button>
 
-        <input type="hidden" name="itemType" th:value="${resultsType}"/>
-        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
-    </form>
+    <input type="hidden" name="itemType" th:value="${resultsType}"/>
+    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+</form>
 
-    <!--    TODO: Future -->
-    <footer>
-        <a href="/approval-queue">Items waiting for approval</a>
-        <a href="/restricted-mode">Restricted mode</a>
-        <a href="/lock-all-threads">Lock all Threads</a>
-        <a href="/logs">Logs</a>
-    </footer>
+<!--    TODO: Future -->
+<footer>
+    <a href="/approval-queue">Items waiting for approval</a>
+    <a href="/restricted-mode">Restricted mode</a>
+    <a href="/lock-all-threads">Lock all Threads</a>
+    <a href="/logs">Logs</a>
+</footer>
 
-    <script src="/js/admin.js"></script>
+<script src="/js/admin.js"></script>
 </body>
 </html>

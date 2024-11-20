@@ -1,103 +1,103 @@
 html {
-  padding: 0;
-  margin: 0;
-  box-sizing: border-box;
-  font-weight: normal;
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    font-weight: normal;
 }
 
 body {
-  background-color: #181a1b;
-  color: #a9acb1;
-  font-family: Arial, sans-serif;
-  font-size: 0.8rem;
+    background-color: #181a1b;
+    color: #a9acb1;
+    font-family: Arial, sans-serif;
+    font-size: 0.8rem;
 }
 
 header {
-  text-align: center;
+    text-align: center;
 }
 
 header a,
 header button {
-  background-color: #282a2b;
-  color: #f8f8f2;
-  border: 0.06rem solid #f8f8f2;
+    background-color: #282a2b;
+    color: #f8f8f2;
+    border: 0.06rem solid #f8f8f2;
 }
 
 header button {
-  padding: 0.5rem;
+    padding: 0.5rem;
 }
 
 header button:hover {
-  font-weight: bold;
+    font-weight: bold;
 }
 
 header a {
-  padding: 0.5rem;
-  margin-block-end: 1rem;
-  margin-inline-end: 0.5rem;
-  border: none;
-  text-decoration: none;
+    padding: 0.5rem;
+    margin-block-end: 1rem;
+    margin-inline-end: 0.5rem;
+    border: none;
+    text-decoration: none;
 }
 
 main {
-  margin: 20px;
-  border: 0.06rem solid #f8f8f2;
-  background-color: #282a2b;
-  padding: 0.6rem;
+    margin: 20px;
+    border: 0.06rem solid #f8f8f2;
+    background-color: #282a2b;
+    padding: 0.6rem;
 }
 
 main div {
-  border: 1px solid #f8f8f2;
-  margin-bottom: 0.6rem;
-  padding: 0.6rem;
-  background-color: #383a3b;
+    border: 1px solid #f8f8f2;
+    margin-bottom: 0.6rem;
+    padding: 0.6rem;
+    background-color: #383a3b;
 }
 
 main h3 {
-  color: #f8f8f2;
-  margin-bottom: 0.3rem;
+    color: #f8f8f2;
+    margin-bottom: 0.3rem;
 }
 
 main p {
-  color: #a9acb1;
-  margin-bottom: 0.3rem;
+    color: #a9acb1;
+    margin-bottom: 0.3rem;
 }
 
 form textarea,
 form button {
-  background-color: #282a2b;
-  color: #f8f8f2;
-  border: 0.06rem solid #f8f8f2;
+    background-color: #282a2b;
+    color: #f8f8f2;
+    border: 0.06rem solid #f8f8f2;
 }
 
 form button {
-  padding: 0.5rem;
+    padding: 0.5rem;
 }
 
 form button:hover {
-  font-weight: bold;
+    font-weight: bold;
 }
 
 form textarea {
-  padding: 0.5rem;
-  border: none;
-  max-width: 100%;
+    padding: 0.5rem;
+    border: none;
+    max-width: 100%;
 }
 
 form ::placeholder {
-  color: #6272a4;
-  opacity: 1;
+    color: #6272a4;
+    opacity: 1;
 }
 
 form :-ms-input-placeholder {
-  color: #6272a4;
+    color: #6272a4;
 }
 
 #replyingTo button {
-  background-color: #f8f8f2;
-  color: #282a2b;
-  border: 0.06rem solid #f8f8f2;
-  padding: 0.5rem;
+    background-color: #f8f8f2;
+    color: #282a2b;
+    border: 0.06rem solid #f8f8f2;
+    padding: 0.5rem;
 }
 
 .highlight {
@@ -118,7 +118,7 @@ img {
     height: auto;
 }
 
-@media(min-width: 400px){
+@media (min-width: 400px) {
     img {
         max-inline-size: 12.5rem;
     }
