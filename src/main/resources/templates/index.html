@@ -74,7 +74,7 @@
         <p th:text="${#lists.size(thread.posts)} + ' replies'"></p>
     </div>
 
-    <div>
+    <div th:if="${currentPage > 0 or threads.size() == 20}">
         <a th:if="${currentPage > 0}" th:href="@{/?(page=${currentPage - 1})}">Previous</a>
         <a th:if="${threads.size() == 20}" th:href="@{/?(page=${currentPage + 1})}">Next</a>
     </div>
