@@ -16,7 +16,7 @@ function clearReplyingTo() {
 
 function highlightPost(postId) {
     var postElements = document.querySelectorAll('div[data-post-id]');
-    postElements.forEach(function(postElement) {
+    postElements.forEach(function (postElement) {
         if (postElement.getAttribute('data-post-id') === postId) {
             postElement.classList.add('highlight');
         } else {

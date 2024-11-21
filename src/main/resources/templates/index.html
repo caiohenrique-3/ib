@@ -1,5 +1,8 @@
 <!doctype html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
 <head>
     <title></title>
     <meta charset="UTF-8"/>
@@ -12,7 +15,7 @@
     <a href="/stats" id="site-stats-button">Site Statistics</a>
 
     <h2>Make a new discussion</h2>
-    <form method="post" action="/createThread">
+    <form method="post" th:action="@{/createThread}">
         <input
                 type="text"
                 name="title"
@@ -33,13 +36,36 @@
         ><br/>
 
         <input type="text" name="imageUrl" placeholder="Image URL"/><br/>
+
+        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
     </form>
+
+    <div sec:authorize="hasRole('ROLE_admin')">
+        <p>Logged in as: <span sec:authentication="name"></span></p>
+        <p style="color: red;">ADMIN MODE ON</p>
+    </div>
 </header>
 
 <main>
     <h2>Discussions</h2>
     <div th:each="thread : ${threads}">
-        <p th:text="${thread.getFormattedInfo}"></p>
+        <span th:text="${thread.getFormattedInfo}"></span>
+        <span th:if="${thread.isLocked}">🔒</span>
+
+        <div sec:authorize="hasRole('ROLE_admin')" class="button-container">
+            <form th:action="@{/threads/{id}(id=${thread.id})}" th:method="delete">
+                <input type="hidden" name="_method" value="delete">
+                <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+                <button id="delete-thread-button">Delete</button>
+            </form>
+
+            <form th:action="${thread.isLocked} ?
+    @{/unlockThread/{id}(id=${thread.id})}
+    : @{/lockThread/{id}(id=${thread.id})}" method="post">
+                <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+                <button th:text="${thread.isLocked} ? 'Unlock' : 'Lock'" id="lock-thread-button"></button>
+            </form>
+        </div>
 
         <img th:if="${thread.imageUrl != null && !thread.imageUrl.isEmpty()}" th:src="${thread.imageUrl}" alt="Image"/>
 
@@ -48,7 +74,7 @@
         <p th:text="${#lists.size(thread.posts)} + ' replies'"></p>
     </div>
 
-    <div>
+    <div th:if="${currentPage > 0 or threads.size() == 20}">
         <a th:if="${currentPage > 0}" th:href="@{/?(page=${currentPage - 1})}">Previous</a>
         <a th:if="${threads.size() == 20}" th:href="@{/?(page=${currentPage + 1})}">Next</a>
     </div>

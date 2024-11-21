@@ -7,6 +7,7 @@ import com.example.repositories.ThreadRepository;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -89,5 +90,10 @@ public class PostService {
         return days + " days, " + hours + " hours, " + minutes + " minutes, " +
                 seconds + " seconds - post " + latestPost.getId() + " on thread " +
                 latestPost.getParentThread().getId();
+    }
+
+    public ArrayList<Post> findPostByBody(String body) {
+        List<Post> posts = postRepository.findByPostBody(body);
+        return new ArrayList<>(posts);
     }
 }

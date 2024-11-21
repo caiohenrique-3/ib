@@ -7,7 +7,6 @@ import com.example.repositories.ThreadRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
@@ -16,12 +15,12 @@ import org.springframework.data.domain.Pageable;
 
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
 
 @SpringBootTest
 public class ThreadServiceTests {
@@ -171,7 +170,7 @@ public class ThreadServiceTests {
 
     @Test
     @Disabled
-    // Broken test
+        // Broken test
     void getTimeSinceLastThread_1() throws Exception {
         Thread t = threadService.createThreadAndReturn("Test", "test", null);
 
@@ -209,5 +208,78 @@ public class ThreadServiceTests {
     void getTimeSinceLastThread_2() {
         assertEquals("No threads found",
                 threadService.getTimeSinceLastThread());
+    }
+
+    @Test
+    void lockThreadById() {
+        Thread t = threadService
+                .createThreadAndReturn("test03", "this is a test!", null);
+
+        threadService.lockThreadById(t.getId());
+
+        assertTrue(threadRepository
+                .findById(t.getId()).get().isLocked());
+    }
+
+    @Test
+    void unlockThreadById() {
+        Thread t = threadService
+                .createThreadAndReturn("test03", "this is a test!", null);
+
+        threadService.lockThreadById(t.getId());
+
+        assertTrue(threadRepository
+                .findById(t.getId()).get().isLocked());
+
+        threadService.unlockThreadById(t.getId());
+
+        assertFalse(threadRepository
+                .findById(t.getId()).get().isLocked());
+    }
+
+    @Test
+    void searchingThreadByTitleAndBody_singleResult() {
+        Thread t = threadService
+                .createThreadAndReturn("test03", "this is a test!", null);
+
+        ArrayList<Thread> foundThread =
+                threadService.findThreadByTitleAndBody("test03", null);
+
+        assertEquals(t.getId(), foundThread.get(0).getId());
+    }
+
+    @Test
+    void searchingThreadByTitleAndBody_multipleResults() {
+        Thread t1 = threadService
+                .createThreadAndReturn("test03", "this is a test!", null);
+
+        Thread t2 = threadService
+                .createThreadAndReturn("test03", "this is a test!", null);
+
+        Thread t3 = threadService
+                .createThreadAndReturn("test03", "this is a test!", null);
+
+        ArrayList<Thread> foundThreads =
+                threadService.findThreadByTitleAndBody("test03", null);
+
+        assertEquals(3, foundThreads.size());
+    }
+
+    @Test
+    void searchingThreadByTitleAndBody_isNotCaseSensitive() {
+        Thread t = threadService
+                .createThreadAndReturn("test03", "this is a test!", null);
+
+        ArrayList<Thread> foundThread =
+                threadService.findThreadByTitleAndBody("TEST03", null);
+
+        assertFalse(foundThread.isEmpty());
+
+        foundThread.clear();
+
+        ArrayList<Thread> foundThread2 = threadService
+                .findThreadByTitleAndBody(null, "THIS IS A TEST!");
+
+        assertFalse(foundThread2.isEmpty());
     }
 }

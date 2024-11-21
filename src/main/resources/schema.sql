@@ -5,7 +5,8 @@ CREATE TABLE IF NOT EXISTS thread (
     timestamp TIMESTAMP NOT NULL,
     title VARCHAR(255) NOT NULL,
     initial_post_body TEXT NOT NULL,
-    image_url VARCHAR(255)
+    image_url VARCHAR(255),
+    locked BOOL NOT NULL DEFAULT 0
 );
 
 CREATE TABLE IF NOT EXISTS post (

@@ -1,0 +1,129 @@
+html {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    font-weight: normal;
+}
+
+body {
+    background-color: #181a1b;
+    color: #a9acb1;
+    font-family: Arial, sans-serif;
+    font-size: 1rem;
+}
+
+#noscript-warning span {
+    color: red;
+    font-size: 2rem;
+    text-align: center;
+    display: block;
+    margin: 1rem 0;
+}
+
+h1, h4 {
+    color: #f8f8f2;
+}
+
+form {
+    background-color: #282a2b;
+    padding: 1rem;
+    border: 0.06rem solid #f8f8f2;
+    margin-block-end: 1rem;
+}
+
+input, select, button {
+    background-color: #383a3b;
+    color: #f8f8f2;
+    border: 0.06rem solid #f8f8f2;
+    padding: 0.5rem;
+    margin-inline-end: 0.5rem;
+    margin-block-end: 1rem;
+}
+
+input::placeholder {
+    color: #6272a4;
+    opacity: 1;
+}
+
+button:hover {
+    font-weight: bold;
+}
+
+ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+li {
+    background-color: #282a2b;
+    border: 1px solid #f8f8f2;
+    margin-block-end: 0.6rem;
+    padding: 0.6rem;
+    color: #f8f8f2;
+}
+
+a {
+    color: #f8f8f2;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+span {
+    margin-inline-end: 1rem;
+}
+
+button {
+    cursor: pointer;
+    border-radius: 0.15rem;
+}
+
+button.delete:hover {
+    color: red;
+}
+
+button.lock:hover {
+    color: yellow;
+}
+
+button.unlock:hover {
+    color: green;
+}
+
+#actionField {
+    display: none;
+}
+
+@media (max-width: 420px) {
+    form {
+        padding: 0.5rem;
+    }
+
+    input, select, button {
+        padding: 0.25rem;
+        margin-inline-end: 0.25rem;
+        margin-block-end: 0.5rem;
+    }
+
+    li {
+        padding: 0.5rem;
+        margin-block-end: 0.3rem;
+    }
+}
+
+footer {
+    position: sticky;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    inline-size: 100%;
+    margin-block-start: 3rem;
+    top: 100vh;
+}
+
+footer a {
+    padding: 0.5rem;
+}

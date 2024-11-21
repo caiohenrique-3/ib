@@ -5,7 +5,7 @@ import jakarta.persistence.*;
 import java.util.List;
 
 @Entity
-public class Thread extends BaseEntity{
+public class Thread extends BaseEntity {
     @Column(nullable = false)
     private String title;
 
@@ -14,6 +14,9 @@ public class Thread extends BaseEntity{
 
     @OneToMany(mappedBy = "parentThread", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Post> posts;
+
+    @Column(nullable = false)
+    private boolean isLocked;
 
     public String getTitle() {
         return title;
@@ -37,5 +40,13 @@ public class Thread extends BaseEntity{
 
     public void setPosts(List<Post> posts) {
         this.posts = posts;
+    }
+
+    public boolean isLocked() {
+        return isLocked;
+    }
+
+    public void setLocked(boolean locked) {
+        isLocked = locked;
     }
 }

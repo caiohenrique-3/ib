@@ -1,5 +1,7 @@
 <!doctype html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <title></title>
     <meta charset="UTF-8"/>
@@ -16,6 +18,14 @@
 <main>
     <div th:id="'post-' + ${post.id}" th:data-post-id="${post.id}">
         <p th:text="${post.getFormattedInfo}"></p>
+
+        <div sec:authorize="hasRole('ROLE_admin')" class="button-container">
+            <form th:action="@{/posts/{id}(id=${post.id})}" th:method="delete">
+                <input type="hidden" name="_method" value="delete">
+                <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+                <button id="delete-post-button">Delete</button>
+            </form>
+        </div>
 
         <img th:if="${post.imageUrl != null && !post.imageUrl.isEmpty()}" th:src="${post.imageUrl}" alt="Image"/>
 
