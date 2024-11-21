@@ -33,6 +33,8 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.DELETE, "/threads/**").hasRole("admin")
                         .requestMatchers(HttpMethod.DELETE, "/posts/**").hasRole("admin")
                         .requestMatchers(HttpMethod.POST, "/search/**").hasRole("admin")
+                        .requestMatchers(HttpMethod.POST, "/threads/multiAction").hasRole("admin")
+                        .requestMatchers(HttpMethod.POST, "/posts/multiAction").hasRole("admin")
                         .anyRequest()
                         .permitAll())
                 .httpBasic(Customizer.withDefaults())

@@ -149,10 +149,10 @@ public class MainController {
     }
 
     @PostMapping("/search")
-    public String searchThread(@RequestParam("title") String title,
-                               @RequestParam("body") String body,
-                               @RequestParam("type") String type,
-                               Model model) {
+    public String searchTypeInDatabase(@RequestParam("title") String title,
+                                       @RequestParam("body") String body,
+                                       @RequestParam("type") String type,
+                                       Model model) {
         if (title.isBlank() && body.isBlank())
             return "admin";
 
